@@ -1,0 +1,105 @@
+version: '3.9'
+
+networks:
+  yb-dbnet:
+    name: yb-dbnet
+
+volumes:
+  vol_yb_tenant1_1:
+    name: vol_yb_tenant1_1
+  vol_yb_tenant1_2:
+    name: vol_yb_tenant1_2
+  vol_yb_tenant1_3:
+    name: vol_yb_tenant1_3
+
+services:
+
+  yb-tserver-tenant1-1:
+    image: local/yugabyte:2.9.0.0-b4
+    container_name: yb-tserver-tenant1-1
+    #hostname: yb-tserver-tenant1-1
+    #domainname: svcs.sh
+    networks:
+      - yb-dbnet
+    volumes:
+      - vol_yb_tenant1_1:/mnt/tserver:rw
+    command: [ "/docker-entrypoint.sh", "/home/yugabyte/bin/yb-tserver",
+      "--fs_data_dirs=/mnt/tserver",
+      "--enable_ysql",
+      "--ysql_enable_auth",
+      "--logtostderr",
+      "--rpc_bind_addresses=yb-tserver-tenant1-1:9100",
+      "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
+      "--placement_cloud=docker",
+      "--placement_region=tenant1",
+      "--placement_zone=tenant1a"
+      #"--placement_uuid=95778a3cb3d93983a413531392de605a"
+      ]
+    labels:
+      - "traefik.enable=true"
+      - "yugabyte.enable=true"
+      - "traefik.tcp.routers.yb-tenant1-1-tservers.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.yb-tenant1-1-tservers.entrypoints=yb-postgres-tenant1"
+      - "traefik.tcp.routers.yb-tenant1-1-tservers.service=tenant1-tservers"
+      - "traefik.tcp.services.tenant1-tservers.loadbalancer.server.address=yb-tserver-tenant1-1"
+      - "traefik.tcp.services.tenant1-tservers.loadbalancer.server.port=5433"
+
+  yb-tserver-tenant1-2:
+    image: local/yugabyte:2.9.0.0-b4
+    container_name: yb-tserver-tenant1-2
+    #hostname: yb-tserver-tenant1-2
+    #domainname: svcs.sh
+    networks:
+      - yb-dbnet
+    volumes:
+      - vol_yb_tenant1_2:/mnt/tserver:rw
+    command: [ "/docker-entrypoint.sh", "/home/yugabyte/bin/yb-tserver",
+      "--fs_data_dirs=/mnt/tserver",
+      "--enable_ysql",
+      "--ysql_enable_auth",
+      "--logtostderr",
+      "--rpc_bind_addresses=yb-tserver-tenant1-2:9100",
+      "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
+      "--placement_cloud=docker",
+      "--placement_region=tenant1",
+      "--placement_zone=tenant1a"
+      #"--placement_uuid=d45008dcf4c460038834fbd0c008f75a"
+      ]
+    labels:
+      - "traefik.enable=true"
+      - "yugabyte.enable=true"
+      - "traefik.tcp.routers.yb-tenant1-2-tservers.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.yb-tenant1-2-tservers.entrypoints=yb-postgres-tenant1"
+      - "traefik.tcp.routers.yb-tenant1-2-tservers.service=tenant1-tservers"
+      - "traefik.tcp.services.tenant1-tservers.loadbalancer.server.address=yb-tserver-tenant1-2"
+      - "traefik.tcp.services.tenant1-tservers.loadbalancer.server.port=5433"
+
+  yb-tserver-tenant1-3:
+    image: local/yugabyte:2.9.0.0-b4
+    container_name: yb-tserver-tenant1-3
+    #hostname: yb-tserver-tenant1-3
+    #domainname: svcs.sh
+    networks:
+      - yb-dbnet
+    volumes:
+      - vol_yb_tenant1_3:/mnt/tserver:rw
+    command: [ "/docker-entrypoint.sh", "/home/yugabyte/bin/yb-tserver",
+      "--fs_data_dirs=/mnt/tserver",
+      "--enable_ysql",
+      "--ysql_enable_auth",
+      "--logtostderr",
+      "--rpc_bind_addresses=yb-tserver-tenant1-3:9100",
+      "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
+      "--placement_cloud=docker",
+      "--placement_region=tenant1",
+      "--placement_zone=tenant1a"
+      #"--placement_uuid=c86b7857ffc8de57f67bf5d7d2bb00d0"
+      ]
+    labels:
+      - "traefik.enable=true"
+      - "yugabyte.enable=true"
+      - "traefik.tcp.routers.yb-tenant1-3-tservers.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.yb-tenant1-3-tservers.entrypoints=yb-postgres-tenant1"
+      - "traefik.tcp.routers.yb-tenant1-3-tservers.service=tenant1-tservers"
+      - "traefik.tcp.services.tenant1-tservers.loadbalancer.server.address=yb-tserver-tenant1-3"
+      - "traefik.tcp.services.tenant1-tservers.loadbalancer.server.port=5433"

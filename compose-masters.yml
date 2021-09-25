@@ -1,0 +1,71 @@
+version: '3.9'
+
+networks:
+  yb-dbnet:
+    name: yb-dbnet
+
+volumes:
+  vol_yb_master_1:
+    name: vol_yb_master_1
+  vol_yb_master_2:
+    name: vol_yb_master_2
+  vol_yb_master_3:
+    name: vol_yb_master_3
+
+services:
+
+  yb-master-1:
+    image: local/yugabyte:2.9.0.0-b4
+    container_name: yb-master-n1
+    #hostname: yb-master-n1
+    #domainname: svcs.sh
+    networks:
+      - yb-dbnet
+    ports:
+      - 7000:7000
+    volumes:
+      - vol_yb_master_1:/mnt/master:rw
+    command: [ "/docker-entrypoint.sh", "/home/yugabyte/bin/yb-master",
+      "--fs_data_dirs=/mnt/master",
+      "--master_addresses=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
+      "--rpc_bind_addresses=yb-master-n1:7100",
+      "--logtostderr",
+      "--minloglevel=1",
+      "--placement_cloud=docker",
+      "--replication_factor=3"]
+
+  yb-master-2:
+    image: local/yugabyte:2.9.0.0-b4
+    container_name: yb-master-n2
+    #hostname: yb-master-n2
+    #domainname: svcs.sh
+    networks:
+      - yb-dbnet
+    volumes:
+      - vol_yb_master_2:/mnt/master:rw
+    command: [ "/docker-entrypoint.sh", "/home/yugabyte/bin/yb-master",
+      "--fs_data_dirs=/mnt/master",
+      "--master_addresses=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
+      "--rpc_bind_addresses=yb-master-n2:7100",
+      "--logtostderr",
+      "--minloglevel=1",
+      "--placement_cloud=docker",
+      "--replication_factor=3"]
+
+  yb-master-3:
+    image: local/yugabyte:2.9.0.0-b4
+    container_name: yb-master-n3
+    #hostname: yb-master-n3
+    #domainname: svcs.sh
+    networks:
+      - yb-dbnet
+    volumes:
+      - vol_yb_master_3:/mnt/master:rw
+    command: [ "/docker-entrypoint.sh", "/home/yugabyte/bin/yb-master",
+      "--fs_data_dirs=/mnt/master",
+      "--master_addresses=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
+      "--rpc_bind_addresses=yb-master-n3:7100",
+      "--logtostderr",
+      "--minloglevel=1",
+      "--placement_cloud=docker",
+      "--replication_factor=3"]

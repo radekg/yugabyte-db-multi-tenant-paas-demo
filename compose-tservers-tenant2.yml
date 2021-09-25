@@ -1,0 +1,117 @@
+version: '3.9'
+
+networks:
+  yb-dbnet:
+    name: yb-dbnet
+
+volumes:
+  vol_yb_tenant2_1:
+    name: vol_yb_tenant2_1
+  vol_yb_tenant2_2:
+    name: vol_yb_tenant2_2
+  vol_yb_tenant2_3:
+    name: vol_yb_tenant2_3
+
+services:
+
+  # traefik-tenan2:
+  #   restart: unless-stopped
+  #   image: traefik:v2.5.3
+  #   networks:
+  #     - yb-dbnet
+  #   ports:
+  #     - 35434:35434
+  #   volumes:
+  #     - type: bind
+  #       source: ./etc/traefik/tenant2
+  #       target: /etc/traefik
+
+  yb-tserver-tenant2-1:
+    image: local/yugabyte:2.9.0.0-b4
+    container_name: yb-tserver-tenant2-1
+    #hostname: yb-tserver-tenant2-1
+    #domainname: svcs.sh
+    networks:
+      - yb-dbnet
+    volumes:
+      - vol_yb_tenant2_1:/mnt/tserver:rw
+    command: [ "/docker-entrypoint.sh", "/home/yugabyte/bin/yb-tserver",
+      "--fs_data_dirs=/mnt/tserver",
+      "--enable_ysql",
+      "--ysql_enable_auth",
+      "--logtostderr",
+      "--rpc_bind_addresses=yb-tserver-tenant2-1:9100",
+      "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
+      "--placement_cloud=docker",
+      "--placement_region=tenant2",
+      "--placement_zone=tenant2a"
+      #"--placement_uuid=1da5a4820ae08bf985633c9ef095fb72"
+      ]
+    labels:
+      - "traefik.enable=true"
+      - "yugabyte.enable=true"
+      - "traefik.tcp.routers.yb-tenant2-1-tservers.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.yb-tenant2-1-tservers.entrypoints=yb-postgres-tenant2"
+      - "traefik.tcp.routers.yb-tenant2-1-tservers.service=tenant2-tservers"
+      - "traefik.tcp.services.tenant2-tservers.loadbalancer.server.address=yb-tserver-tenant2-1"
+      - "traefik.tcp.services.tenant2-tservers.loadbalancer.server.port=5433"
+
+  yb-tserver-tenant2-2:
+    image: local/yugabyte:2.9.0.0-b4
+    container_name: yb-tserver-tenant2-2
+    #hostname: yb-tserver-tenant2-2
+    #domainname: svcs.sh
+    networks:
+      - yb-dbnet
+    volumes:
+      - vol_yb_tenant2_2:/mnt/tserver:rw
+    command: [ "/docker-entrypoint.sh", "/home/yugabyte/bin/yb-tserver",
+      "--fs_data_dirs=/mnt/tserver",
+      "--enable_ysql",
+      "--ysql_enable_auth",
+      "--logtostderr",
+      "--rpc_bind_addresses=yb-tserver-tenant2-2:9100",
+      "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
+      "--placement_cloud=docker",
+      "--placement_region=tenant2",
+      "--placement_zone=tenant2a"
+      #"--placement_uuid=f7c697a828241a6405e5ed24afd551af"
+      ]
+    labels:
+      - "traefik.enable=true"
+      - "yugabyte.enable=true"
+      - "traefik.tcp.routers.yb-tenant2-2-tservers.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.yb-tenant2-2-tservers.entrypoints=yb-postgres-tenant2"
+      - "traefik.tcp.routers.yb-tenant2-2-tservers.service=tenant2-tservers"
+      - "traefik.tcp.services.tenant2-tservers.loadbalancer.server.address=yb-tserver-tenant2-2"
+      - "traefik.tcp.services.tenant2-tservers.loadbalancer.server.port=5433"
+
+  yb-tserver-tenant2-3:
+    image: local/yugabyte:2.9.0.0-b4
+    container_name: yb-tserver-tenant2-3
+    #hostname: yb-tserver-tenant2-3
+    #domainname: svcs.sh
+    networks:
+      - yb-dbnet
+    volumes:
+      - vol_yb_tenant2_3:/mnt/tserver:rw
+    command: [ "/docker-entrypoint.sh", "/home/yugabyte/bin/yb-tserver",
+      "--fs_data_dirs=/mnt/tserver",
+      "--enable_ysql",
+      "--ysql_enable_auth",
+      "--logtostderr",
+      "--rpc_bind_addresses=yb-tserver-tenant2-3:9100",
+      "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
+      "--placement_cloud=docker",
+      "--placement_region=tenant2",
+      "--placement_zone=tenant2a"
+      #"--placement_uuid=77de728339d5609370e896bd3abf7e6a"
+      ]
+    labels:
+      - "traefik.enable=true"
+      - "yugabyte.enable=true"
+      - "traefik.tcp.routers.yb-tenant2-3-tservers.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.yb-tenant2-3-tservers.entrypoints=yb-postgres-tenant2"
+      - "traefik.tcp.routers.yb-tenant2-3-tservers.service=tenant2-tservers"
+      - "traefik.tcp.services.tenant2-tservers.loadbalancer.server.address=yb-tserver-tenant2-3"
+      - "traefik.tcp.services.tenant2-tservers.loadbalancer.server.port=5433"

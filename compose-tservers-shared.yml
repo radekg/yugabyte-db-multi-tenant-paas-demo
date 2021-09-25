@@ -1,0 +1,93 @@
+version: '3.9'
+
+networks:
+  yb-dbnet:
+    name: yb-dbnet
+
+volumes:
+  vol_yb_shared_1:
+    name: vol_yb_shared_1
+  vol_yb_shared_2:
+    name: vol_yb_shared_2
+  vol_yb_shared_3:
+    name: vol_yb_shared_3
+
+services:
+
+  yb-tserver-shared-1:
+    image: local/yugabyte:2.9.0.0-b4
+    container_name: yb-tserver-shared-1
+    #hostname: yb-tserver-shared-1
+    #domainname: svcs.sh
+    networks:
+      - yb-dbnet
+    volumes:
+      - vol_yb_shared_1:/mnt/tserver:rw
+    command: [ "/docker-entrypoint.sh", "/home/yugabyte/bin/yb-tserver",
+      "--fs_data_dirs=/mnt/tserver",
+      "--enable_ysql",
+      "--ysql_enable_auth",
+      "--logtostderr",
+      "--rpc_bind_addresses=yb-tserver-shared-1:9100",
+      "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
+      "--placement_cloud=docker"]
+    labels:
+      - "traefik.enable=true"
+      - "yugabyte.enable=true"
+      - "traefik.tcp.routers.yb-shared-1-tservers.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.yb-shared-1-tservers.entrypoints=yb-postgres-shared"
+      - "traefik.tcp.routers.yb-shared-1-tservers.service=shared-tservers"
+      - "traefik.tcp.services.shared-tservers.loadbalancer.server.address=yb-tserver-shared-1"
+      - "traefik.tcp.services.shared-tservers.loadbalancer.server.port=5433"
+
+  yb-tserver-shared-2:
+    image: local/yugabyte:2.9.0.0-b4
+    container_name: yb-tserver-shared-2
+    #hostname: yb-tserver-shared-2
+    #domainname: svcs.sh
+    networks:
+      - yb-dbnet
+    volumes:
+      - vol_yb_shared_2:/mnt/tserver:rw
+    command: [ "/docker-entrypoint.sh", "/home/yugabyte/bin/yb-tserver",
+      "--fs_data_dirs=/mnt/tserver",
+      "--enable_ysql",
+      "--ysql_enable_auth",
+      "--logtostderr",
+      "--rpc_bind_addresses=yb-tserver-shared-2:9100",
+      "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
+      "--placement_cloud=docker"]
+    labels:
+      - "traefik.enable=true"
+      - "yugabyte.enable=true"
+      - "traefik.tcp.routers.yb-shared-2-tservers.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.yb-shared-2-tservers.entrypoints=yb-postgres-shared"
+      - "traefik.tcp.routers.yb-shared-2-tservers.service=shared-tservers"
+      - "traefik.tcp.services.shared-tservers.loadbalancer.server.address=yb-tserver-shared-2"
+      - "traefik.tcp.services.shared-tservers.loadbalancer.server.port=5433"
+
+  yb-tserver-shared-3:
+    image: local/yugabyte:2.9.0.0-b4
+    container_name: yb-tserver-shared-3
+    #hostname: yb-tserver-shared-3
+    #domainname: svcs.sh
+    networks:
+      - yb-dbnet
+    volumes:
+      - vol_yb_shared_3:/mnt/tserver:rw
+    command: [ "/docker-entrypoint.sh", "/home/yugabyte/bin/yb-tserver",
+      "--fs_data_dirs=/mnt/tserver",
+      "--enable_ysql",
+      "--ysql_enable_auth",
+      "--logtostderr",
+      "--rpc_bind_addresses=yb-tserver-shared-3:9100",
+      "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
+      "--placement_cloud=docker"]
+    labels:
+      - "traefik.enable=true"
+      - "yugabyte.enable=true"
+      - "traefik.tcp.routers.yb-shared-3-tservers.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.yb-shared-3-tservers.entrypoints=yb-postgres-shared"
+      - "traefik.tcp.routers.yb-shared-3-tservers.service=shared-tservers"
+      - "traefik.tcp.services.shared-tservers.loadbalancer.server.address=yb-tserver-shared-3"
+      - "traefik.tcp.services.shared-tservers.loadbalancer.server.port=5433"
