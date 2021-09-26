@@ -36,5 +36,3 @@ services:
       - type: bind
         source: ./etc/prometheus
         target: /etc/prometheus
-    ports:
-      - 9090:9090
