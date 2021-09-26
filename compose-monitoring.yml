@@ -13,8 +13,14 @@ services:
       - yb-dbnet
     volumes:
       - type: bind
+        source: ./etc/grafana/dashboards/yb
+        target: /etc/grafana/dashboards/yb
+      - type: bind
         source: ./etc/grafana/grafana.ini
         target: /etc/grafana/grafana.ini
+      - type: bind
+        source: ./etc/grafana/provisioning/dashboards/yb.yaml
+        target: /etc/grafana/provisioning/dashboards/yb.yaml
       - type: bind
         source: ./etc/grafana/provisioning/datasources/yb-prometheus.yaml
         target: /etc/grafana/provisioning/datasources/yb-prometheus.yaml
