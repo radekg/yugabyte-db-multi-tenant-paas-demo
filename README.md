@@ -27,8 +27,8 @@ YugabyteDB dashboard can be accessed on port `7000`. Usually `http://localhost:7
 
 ## Monitoring
 
-This Docker compose configuration provides Prometheus and Grafana instances. Prometheus cannot be be accessed directly, Grafana can be accessed on port `3000`.  
-Grafana instance does not reconfigure the default admin password. Grafana password must to be changed on every container restart.  
+This Docker compose configuration comes with Grafana and Prometheus. Prometheus cannot be be accessed directly, Grafana can be accessed on port `3000`, usually `http://localhost:3000`. Grafana instance does not reconfigure the default admin password. Grafana password must to be changed on every container restart.
+
 If you really, really want to change the _admin_ user password, change the _./etc/grafana/grafana.ini_ _admin\_password_ value to something else than the default but please do not commit the changes to version control!
 
 Grafana instance comes with the Prometheus _YBPrometheus_ datasource configured.
@@ -40,12 +40,14 @@ psql "host=localhost port=35432 dbname=yugabyte user=yugabyte" -f sql-init-tenan
 psql "host=localhost port=35432 dbname=yugabyte user=yugabyte" -f sql-init-tenant2.sql
 ```
 
-## Init Northwind as tenant 1
+## Initialize Northwind as tenant 1
 
+```
 psql "host=localhost port=35432 dbname=tenant1db user=tenant1" -f sql-init-northwind-tenant1.sql
 psql "host=localhost port=35432 dbname=tenant1db user=tenant1" -f sql-init-northwind-data-tenant1.sql
+```
 
-## Connct as tenants
+## Connect as tenants
 
 ```
 psql "host=localhost port=35432 dbname=tenant1db user=tenant1"
@@ -60,6 +62,12 @@ psql "host=localhost port=35432 dbname=tenant2db user=tenant2"
 ```
 docker exec -ti yb-master-n1 /bin/bash -c 'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 list_all_masters'
 docker exec -ti yb-master-n1 /bin/bash -c 'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 list_all_tablet_servers'
+```
+
+List tablets on a tablet server:
+
+```
+docker exec -ti yb-master-n1 /bin/bash -c 'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 list_tablets_for_tablet_server ...'
 ```
 
 ## Clean everything up
@@ -88,7 +96,9 @@ docker volume rm \
     vol_yb_shared_3
 ```
 
-## Decommission setup
+## Decommission tenant 1 TServers
+
+First, start the minimum setup with tenant1 TServers:
 
 ```
 docker-compose \
@@ -99,7 +109,7 @@ docker-compose \
     up
 ```
 
-Start tenant 1 TServers:
+In another terminal, start tenant 1 TServers:
 
 ```
 docker-compose \
@@ -107,7 +117,7 @@ docker-compose \
     up
 ```
 
-Start tenant 2 TServers:
+Optionally, start tenant 2 TServers in yet one more terminal:
 
 ```
 docker-compose \
