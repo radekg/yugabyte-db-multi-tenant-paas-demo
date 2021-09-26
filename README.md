@@ -14,11 +14,24 @@ cd -
 docker-compose \
     -f compose-lb.yml \
     -f compose-masters.yml \
+    -f compose-monitoring.yml \
     -f compose-tservers-shared.yml \
     -f compose-tservers-tenant1.yml \
     -f compose-tservers-tenant2.yml \
     up
 ```
+
+## YugabyteDB dashboard
+
+YugabyteDB dashboard can be accessed on port `7000`. Usually `http://localhost:7000`.
+
+## Monitoring
+
+This Docker compose configuration provides Prometheus and Grafana instances. Prometheus cannot be be accessed directly, Grafana can be accessed on port `3000`.  
+Grafana instance does not reconfigure the default admin password. Grafana password must to be changed on every container restart.  
+If you really, really want to change the _admin_ user password, change the _./etc/grafana/grafana.ini_ _admin\_password_ value to something else than the default but please do not commit the changes to version control!
+
+Grafana instance comes with the Prometheus _YBPrometheus_ datasource configured.
 
 ## Init tenants
 
@@ -55,6 +68,7 @@ docker exec -ti yb-master-n1 /bin/bash -c 'yb-admin -master_addresses yb-master-
 docker-compose \
     -f compose-lb.yml \
     -f compose-masters.yml \
+    -f compose-monitoring.yml \
     -f compose-tservers-shared.yml \
     -f compose-tservers-tenant1.yml \
     -f compose-tservers-tenant2.yml \
@@ -80,6 +94,7 @@ docker volume rm \
 docker-compose \
     -f compose-lb.yml \
     -f compose-masters.yml \
+    -f compose-monitoring.yml \
     -f compose-tservers-shared.yml \
     up
 ```

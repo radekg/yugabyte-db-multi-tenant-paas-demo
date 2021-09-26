@@ -1,0 +1,136 @@
+# my global config
+global:
+  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      # - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+
+  - job_name: 'yb-tservers-shared'
+    metrics_path: /prometheus-metrics
+    static_configs:
+      - targets: ['yb-tserver-shared-1:9000','yb-tserver-shared-2:9000','yb-tserver-shared-3:9000']
+        labels:
+          export_type: "tserver_export"
+  - job_name: 'yb-tservers-tenant1'
+    metrics_path: /prometheus-metrics
+    static_configs:
+      - targets: ['yb-tserver-tenant1-1:9000','yb-tserver-tenant1-2:9000','yb-tserver-tenant1-3:9000']
+        labels:
+          export_type: "tserver_export"
+  - job_name: 'yb-tservers-tenant2'
+    metrics_path: /prometheus-metrics
+    static_configs:
+      - targets: ['yb-tserver-tenant2-1:9000','yb-tserver-tenant2-2:9000','yb-tserver-tenant2-3:9000']
+        labels:
+          export_type: "tserver_export"
+  - job_name: 'yb-shared-psql'
+    metrics_path: /prometheus-metrics
+    relabel_configs:
+      - target_label: "node_prefix"
+        replacement: "cluster-3"
+    metric_relabel_configs:
+      # Save the name of the metric so we can group_by since we cannot by __name__ directly...
+      - source_labels: ["__name__"]
+        regex: "(.*)"
+        target_label: "saved_name"
+        replacement: "$1"
+      # The following basically retrofit the handler_latency_* metrics to label format.
+      - source_labels: ["__name__"]
+        regex: "handler_latency_(yb_[^_]*)_([^_]*)_([^_]*)(.*)"
+        target_label: "server_type"
+        replacement: "$1"
+      - source_labels: ["__name__"]
+        regex: "handler_latency_(yb_[^_]*)_([^_]*)_([^_]*)(.*)"
+        target_label: "service_type"
+        replacement: "$2"
+      - source_labels: ["__name__"]
+        regex: "handler_latency_(yb_[^_]*)_([^_]*)_([^_]*)(_sum|_count)?"
+        target_label: "service_method"
+        replacement: "$3"
+      - source_labels: ["__name__"]
+        regex: "handler_latency_(yb_[^_]*)_([^_]*)_([^_]*)(_sum|_count)?"
+        target_label: "__name__"
+        replacement: "rpc_latency$4"
+    static_configs:
+      - targets: ['yb-tserver-shared-1:13000','yb-tserver-shared-2:13000','yb-tserver-shared-3:13000']
+        labels:
+          export_type: "ysql_export"
+  - job_name: 'yb-tenant1-psql'
+    metrics_path: /prometheus-metrics
+    relabel_configs:
+      - target_label: "node_prefix"
+        replacement: "cluster-1"
+    metric_relabel_configs:
+      # Save the name of the metric so we can group_by since we cannot by __name__ directly...
+      - source_labels: ["__name__"]
+        regex: "(.*)"
+        target_label: "saved_name"
+        replacement: "$1"
+      # The following basically retrofit the handler_latency_* metrics to label format.
+      - source_labels: ["__name__"]
+        regex: "handler_latency_(yb_[^_]*)_([^_]*)_([^_]*)(.*)"
+        target_label: "server_type"
+        replacement: "$1"
+      - source_labels: ["__name__"]
+        regex: "handler_latency_(yb_[^_]*)_([^_]*)_([^_]*)(.*)"
+        target_label: "service_type"
+        replacement: "$2"
+      - source_labels: ["__name__"]
+        regex: "handler_latency_(yb_[^_]*)_([^_]*)_([^_]*)(_sum|_count)?"
+        target_label: "service_method"
+        replacement: "$3"
+      - source_labels: ["__name__"]
+        regex: "handler_latency_(yb_[^_]*)_([^_]*)_([^_]*)(_sum|_count)?"
+        target_label: "__name__"
+        replacement: "rpc_latency$4"
+    static_configs:
+      - targets: ['yb-tserver-tenant1-1:13000','yb-tserver-tenant1-2:13000','yb-tserver-tenant1-3:13000']
+        labels:
+          export_type: "ysql_export"
+  - job_name: 'yb-tenant2-psql'
+    metrics_path: /prometheus-metrics
+    relabel_configs:
+      - target_label: "node_prefix"
+        replacement: "cluster-2"
+    metric_relabel_configs:
+      # Save the name of the metric so we can group_by since we cannot by __name__ directly...
+      - source_labels: ["__name__"]
+        regex: "(.*)"
+        target_label: "saved_name"
+        replacement: "$1"
+      # The following basically retrofit the handler_latency_* metrics to label format.
+      - source_labels: ["__name__"]
+        regex: "handler_latency_(yb_[^_]*)_([^_]*)_([^_]*)(.*)"
+        target_label: "server_type"
+        replacement: "$1"
+      - source_labels: ["__name__"]
+        regex: "handler_latency_(yb_[^_]*)_([^_]*)_([^_]*)(.*)"
+        target_label: "service_type"
+        replacement: "$2"
+      - source_labels: ["__name__"]
+        regex: "handler_latency_(yb_[^_]*)_([^_]*)_([^_]*)(_sum|_count)?"
+        target_label: "service_method"
+        replacement: "$3"
+      - source_labels: ["__name__"]
+        regex: "handler_latency_(yb_[^_]*)_([^_]*)_([^_]*)(_sum|_count)?"
+        target_label: "__name__"
+        replacement: "rpc_latency$4"
+    static_configs:
+      - targets: ['yb-tserver-tenant2-1:13000','yb-tserver-tenant2-2:13000','yb-tserver-tenant2-3:13000']
+        labels:
+          export_type: "ysql_export"

@@ -1,0 +1,32 @@
+version: '3.9'
+
+networks:
+  yb-dbnet:
+    name: yb-dbnet
+
+services:
+
+  grafana:
+    container_name: yb-grafana
+    image: grafana/grafana:8.1.5
+    networks:
+      - yb-dbnet
+    volumes:
+      - type: bind
+        source: ./etc/grafana/grafana.ini
+        target: /etc/grafana/grafana.ini
+      - type: bind
+        source: ./etc/grafana/provisioning/datasources/yb-prometheus.yaml
+        target: /etc/grafana/provisioning/datasources/yb-prometheus.yaml
+    ports:
+      - 3000:3000
+
+  prometheus:
+    container_name: yb-prometheus
+    image: prom/prometheus:v2.30.0
+    networks:
+      - yb-dbnet
+    volumes:
+      - type: bind
+        source: ./etc/prometheus
+        target: /etc/prometheus

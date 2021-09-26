@@ -1,0 +1,21 @@
+# https://grafana.com/docs/grafana/latest/administration/provisioning/#example-data-source-config-file
+# config file version
+apiVersion: 1
+
+# list of datasources that should be deleted from the database
+deleteDatasources:
+  - name: YBPrometheus
+    orgId: 1
+
+# list of datasources to insert/update depending
+# what's available in the database
+datasources:
+  - name: YBPrometheus
+    type: prometheus
+    access: proxy
+    orgId: 1
+    uid: yb_prometheus
+    url: http://yb-prometheus:9090
+    version: 1
+    # <bool> allow users to edit datasources from the UI.
+    editable: false
