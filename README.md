@@ -56,22 +56,6 @@ To connect as a tenant:
 - `tenant 1`: `psql "host=localhost port=35432 dbname=tenant1db user=tenant1"`
 - `tenant 2`: `psql "host=localhost port=35432 dbname=tenant2db user=tenant2"`
 
-## Ops
-
-```sh
-docker exec -ti yb-master-n1 /bin/bash -c \
-        'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 list_all_masters'
-docker exec -ti yb-master-n1 /bin/bash -c \
-        'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 list_all_tablet_servers'
-```
-
-List tablets on a tablet server:
-
-```sh
-docker exec -ti yb-master-n1 /bin/bash -c \
-    'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 list_tablets_for_tablet_server ...'
-```
-
 ### Clean everything up
 
 Remove containers:
@@ -213,3 +197,19 @@ docker exec -ti yb-master-n1 /bin/bash -c \
 ```
 
 The cluster will take some time to reconcile. When finished, tenant can be reinitialized and relevant backups can be restored.
+
+## Ops
+
+```sh
+docker exec -ti yb-master-n1 /bin/bash -c \
+        'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 list_all_masters'
+docker exec -ti yb-master-n1 /bin/bash -c \
+        'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 list_all_tablet_servers'
+```
+
+List tablets on a tablet server:
+
+```sh
+docker exec -ti yb-master-n1 /bin/bash -c \
+    'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 list_tablets_for_tablet_server ...'
+```
