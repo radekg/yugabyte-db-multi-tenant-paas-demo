@@ -1,6 +1,6 @@
 ## Build the image
 
-This step is required for the image to properly handle stop signals.
+The default YugabyteDB Docker image does not handle stop signals. This is fixed by building custom Docker image used by this configuration:
 
 ```sh
 cd ./.docker/yugabyte-db
@@ -14,13 +14,17 @@ YugabyteDB dashboard can be accessed on port `7000`. Usually `http://localhost:7
 
 ## Monitoring
 
-This Docker compose configuration comes with Grafana and Prometheus. Prometheus cannot be be accessed directly, Grafana can be accessed on port `3000`, usually `http://localhost:3000`. Grafana instance does not reconfigure the default admin password. Grafana password must to be changed on every container restart.
+This Docker Compose configuration comes with Grafana and Prometheus. Prometheus cannot be be accessed directly, Grafana can be accessed on port `3000`, usually `http://localhost:3000`. Grafana instance does not reconfigure the default admin password. Grafana password must to be changed on every container restart.
 
-If you really, really want to change the _admin_ user password, change the _./etc/grafana/grafana.ini_ _admin\_password_ value to something else than the default but please do not commit the changes to version control!
+If you _really, really_ want to change the _admin_ user password, change the _./etc/grafana/grafana.ini_ _admin\_password_ value to something else than the default. **Do not commit the changes to version control!**
 
-Grafana instance comes with the Prometheus _YBPrometheus_ datasource configured.
+Grafana instance comes with the Prometheus _YBPrometheus_ datasource.
 
 ## All in one infrastructure
+
+All in one setup starts all components. There are fifteen containers in this configuration.
+
+### Start all in one
 
 ```sh
 docker-compose \
@@ -33,7 +37,7 @@ docker-compose \
     up
 ```
 
-Initialize tenants, in another terminal:
+Wait for the log output to calm down and initialize tenants. Run these commands in another terminal:
 
 ```sh
 psql "host=localhost port=35432 dbname=yugabyte user=yugabyte" \
@@ -42,7 +46,7 @@ psql "host=localhost port=35432 dbname=yugabyte user=yugabyte" \
     -f sql-init-tenant2.sql
 ```
 
-Followed by creating Northwind ojects in the _tenant1db_:
+Followed by creating Northwind ojects in the _tenant1db_ as _tenant1_:
 
 ```sh
 psql "host=localhost port=35432 dbname=tenant1db user=tenant1" \
@@ -139,7 +143,7 @@ Once tenant is onboarded, boot him out of the platform. **The order is important
 psql "host=localhost port=35432 dbname=yugabyte user=yugabyte" -f sql-wipe-tenant1.sql
 ```
 
-Place the TServers in the blacklist. This will prevent the remote bootstrap subsystem from further communication with the TServers which we want to remove.
+Place TServers in the blacklist. This will prevent the remote bootstrap subsystem from further communication with TServers which we want to remove.
 
 ```sh
 docker exec -ti yb-master-n1 /bin/bash -c \
@@ -156,13 +160,13 @@ docker exec -ti yb-master-n1 /bin/bash -c \
     'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 change_blacklist ADD yb-tserver-tenant1-3:9100'
 ```
 
-Once the blacklist has been updated, wait for `Active Tablet-Peers` for these TServers to come down to `0`. Stop the containers with `CTRL+C` in the relevant terminal. Next, remove the containers:
+Once the blacklist has been updated, wait for `Active Tablet-Peers` for these TServers to come down to `0`. Stop containers with `CTRL+C` in the relevant terminal. Next, remove the containers:
 
 ```sh
 docker-compose -f compose-tservers-tenant1.yml rm
 ```
 
-And remove volumes:
+Remove volumes:
 
 ```sh
 docker volume rm \
@@ -173,13 +177,13 @@ docker volume rm \
 
 ### Bring tenant 1 TServers back online
 
-If the tenant is to be re-onboarded, start the relevant TServers again:
+If the tenant is to be re-onboarded, start TServers again:
 
 ```sh
 docker-compose -f compose-tservers-tenant1.yml up
 ```
 
-These TServers are still in the balcklist, they need to be removed from the blacklist.
+These TServers are still in the blacklist so they need to be relisted. Remove them from the blacklist:
 
 ```sh
 docker exec -ti yb-master-n1 /bin/bash -c \

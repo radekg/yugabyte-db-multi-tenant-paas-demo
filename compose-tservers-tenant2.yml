@@ -44,9 +44,7 @@ services:
       "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
       "--placement_cloud=docker",
       "--placement_region=tenant2",
-      "--placement_zone=tenant2a"
-      #"--placement_uuid=1da5a4820ae08bf985633c9ef095fb72"
-      ]
+      "--placement_zone=tenant2a"]
     labels:
       - "traefik.enable=true"
       - "yugabyte.enable=true"
@@ -59,8 +57,6 @@ services:
   yb-tserver-tenant2-2:
     image: local/yugabyte:2.9.0.0-b4
     container_name: yb-tserver-tenant2-2
-    #hostname: yb-tserver-tenant2-2
-    #domainname: svcs.sh
     networks:
       - yb-dbnet
     volumes:
@@ -74,9 +70,7 @@ services:
       "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
       "--placement_cloud=docker",
       "--placement_region=tenant2",
-      "--placement_zone=tenant2a"
-      #"--placement_uuid=f7c697a828241a6405e5ed24afd551af"
-      ]
+      "--placement_zone=tenant2a"]
     labels:
       - "traefik.enable=true"
       - "yugabyte.enable=true"
@@ -89,8 +83,6 @@ services:
   yb-tserver-tenant2-3:
     image: local/yugabyte:2.9.0.0-b4
     container_name: yb-tserver-tenant2-3
-    #hostname: yb-tserver-tenant2-3
-    #domainname: svcs.sh
     networks:
       - yb-dbnet
     volumes:
@@ -104,9 +96,7 @@ services:
       "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
       "--placement_cloud=docker",
       "--placement_region=tenant2",
-      "--placement_zone=tenant2a"
-      #"--placement_uuid=77de728339d5609370e896bd3abf7e6a"
-      ]
+      "--placement_zone=tenant2a"]
     labels:
       - "traefik.enable=true"
       - "yugabyte.enable=true"

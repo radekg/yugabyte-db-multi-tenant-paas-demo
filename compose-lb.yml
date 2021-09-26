@@ -7,6 +7,7 @@ networks:
 services:
 
   traefik-shared:
+  container_name: yb-traefik
     restart: unless-stopped
     image: traefik:v2.5.3
     networks:

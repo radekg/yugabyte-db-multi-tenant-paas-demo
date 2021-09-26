@@ -17,8 +17,6 @@ services:
   yb-master-1:
     image: local/yugabyte:2.9.0.0-b4
     container_name: yb-master-n1
-    #hostname: yb-master-n1
-    #domainname: svcs.sh
     networks:
       - yb-dbnet
     ports:
@@ -37,8 +35,6 @@ services:
   yb-master-2:
     image: local/yugabyte:2.9.0.0-b4
     container_name: yb-master-n2
-    #hostname: yb-master-n2
-    #domainname: svcs.sh
     networks:
       - yb-dbnet
     volumes:
@@ -55,8 +51,6 @@ services:
   yb-master-3:
     image: local/yugabyte:2.9.0.0-b4
     container_name: yb-master-n3
-    #hostname: yb-master-n3
-    #domainname: svcs.sh
     networks:
       - yb-dbnet
     volumes:

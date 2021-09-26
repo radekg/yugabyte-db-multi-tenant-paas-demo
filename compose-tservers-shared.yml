@@ -17,8 +17,6 @@ services:
   yb-tserver-shared-1:
     image: local/yugabyte:2.9.0.0-b4
     container_name: yb-tserver-shared-1
-    #hostname: yb-tserver-shared-1
-    #domainname: svcs.sh
     networks:
       - yb-dbnet
     volumes:
@@ -43,8 +41,6 @@ services:
   yb-tserver-shared-2:
     image: local/yugabyte:2.9.0.0-b4
     container_name: yb-tserver-shared-2
-    #hostname: yb-tserver-shared-2
-    #domainname: svcs.sh
     networks:
       - yb-dbnet
     volumes:
@@ -69,8 +65,6 @@ services:
   yb-tserver-shared-3:
     image: local/yugabyte:2.9.0.0-b4
     container_name: yb-tserver-shared-3
-    #hostname: yb-tserver-shared-3
-    #domainname: svcs.sh
     networks:
       - yb-dbnet
     volumes:
