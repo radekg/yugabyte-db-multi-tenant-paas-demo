@@ -55,10 +55,14 @@ psql "host=localhost port=35432 dbname=tenant1db user=tenant1" \
     -f sql-init-northwind-data-tenant1.sql
 ```
 
-To connect as a tenant:
+Connect as a tenant:
 
-- `tenant 1`: `psql "host=localhost port=35432 dbname=tenant1db user=tenant1"`
-- `tenant 2`: `psql "host=localhost port=35432 dbname=tenant2db user=tenant2"`
+- `tenant 1`: `psql "host=localhost port=35433 dbname=tenant1db user=tenant1"`
+- `tenant 2`: `psql "host=localhost port=35434 dbname=tenant2db user=tenant2"`
+
+Optionally, connect to _shared_ TServers:
+
+- `psql "host=localhost port=35432 dbname=yugabyte user=yugabyte"`
 
 ### Clean everything up
 
