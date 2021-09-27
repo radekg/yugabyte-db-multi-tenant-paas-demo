@@ -1,0 +1,46 @@
+static_resources:
+  listeners:
+  - name: yb_postgres_tenant2_listener
+    address:
+      socket_address:
+        address: 0.0.0.0
+        port_value: 35432
+    filter_chains:
+    - filters:
+      - name: envoy.filters.network.postgres_proxy
+        typed_config:
+          "@type": type.googleapis.com/envoy.extensions.filters.network.postgres_proxy.v3alpha.PostgresProxy
+          stat_prefix: egress_postgres
+      - name: envoy.filters.network.tcp_proxy
+        typed_config:
+          "@type": type.googleapis.com/envoy.extensions.filters.network.tcp_proxy.v3.TcpProxy
+          stat_prefix: postgres_tcp
+          cluster: yb_postgres_tenant2_cluster
+  clusters:
+  - name: yb_postgres_tenant2_cluster
+    connect_timeout: 1s
+    type: STRICT_DNS
+    load_assignment:
+      cluster_name: yb_postgres_tenant2_cluster
+      endpoints:
+      - lb_endpoints:
+        - endpoint:
+            address:
+              socket_address:
+                address: yb-tserver-tenant2-1
+                port_value: 5433
+        - endpoint:
+            address:
+              socket_address:
+                address: yb-tserver-tenant2-2
+                port_value: 5433
+        - endpoint:
+            address:
+              socket_address:
+                address: yb-tserver-tenant2-3
+                port_value: 5433
+admin:
+  address:
+    socket_address:
+      address: 0.0.0.0
+      port_value: 8001

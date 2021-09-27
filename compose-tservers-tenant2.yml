@@ -14,17 +14,19 @@ volumes:
 
 services:
 
-  # traefik-tenan2:
-  #   restart: unless-stopped
-  #   image: traefik:v2.5.3
-  #   networks:
-  #     - yb-dbnet
-  #   ports:
-  #     - 35434:35434
-  #   volumes:
-  #     - type: bind
-  #       source: ./etc/traefik/tenant2
-  #       target: /etc/traefik
+  envoy-yb-tenant2:
+    image: envoyproxy/envoy:v1.18.4
+    restart: unless-stopped
+    container_name: envoy-yb-tenant2
+    command: /usr/local/bin/envoy -c /etc/envoy/envoy-yb-tenant2.yaml -l debug
+    ports:
+      - 35434:35432
+    volumes:
+      - type: bind
+        source: ./etc/envoy/envoy-yb-tenant2.yaml
+        target: /etc/envoy/envoy-yb-tenant2.yaml
+    networks:
+      - yb-dbnet
 
   yb-tserver-tenant2-1:
     image: local/yugabyte:2.9.0.0-b4

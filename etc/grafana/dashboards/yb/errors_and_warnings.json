@@ -21,12 +21,44 @@
     "editable": true,
     "gnetId": null,
     "graphTooltip": 0,
-    "id": null,
+    "id": 4,
     "links": [],
     "panels": [
       {
+        "datasource": null,
+        "gridPos": {
+          "h": 4,
+          "w": 12,
+          "x": 0,
+          "y": 0
+        },
+        "id": 6,
+        "options": {
+          "content": "# Errors\n\nAn increasing number of errors at a point in time, indicates problems at that moment. If this stabilises, it implies the cluster has recovered.\n           ",
+          "mode": "markdown"
+        },
+        "pluginVersion": "8.1.5",
+        "type": "text"
+      },
+      {
+        "datasource": null,
+        "gridPos": {
+          "h": 4,
+          "w": 12,
+          "x": 12,
+          "y": 0
+        },
+        "id": 8,
+        "options": {
+          "content": "# Warnings\n\nWarnings do not necessarily lead to errors. Increasing number of warnings indicates an unexpected cluster state. For example, partition leaders aren't established because leader election is taking place.  \nIf the warning count increases outside of regular maintenance windows, something could be wrong.",
+          "mode": "markdown"
+        },
+        "pluginVersion": "8.1.5",
+        "type": "text"
+      },
+      {
         "datasource": "YBPrometheus",
-        "description": "An increasing number of errors indicates problems.\nThe lower the better.",
+        "description": "An increasing number of errors indicates problems.",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -81,7 +113,7 @@
           "h": 9,
           "w": 12,
           "x": 0,
-          "y": 0
+          "y": 4
         },
         "id": 2,
         "options": {
@@ -162,7 +194,7 @@
           "h": 9,
           "w": 12,
           "x": 12,
-          "y": 0
+          "y": 4
         },
         "id": 4,
         "options": {
@@ -201,6 +233,6 @@
     "timepicker": {},
     "timezone": "",
     "title": "TServer: Errors and warnings",
-    "uid": null,
-    "version": 0
+    "uid": "19tCuaNnk",
+    "version": 2
   }

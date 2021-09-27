@@ -28,7 +28,6 @@ All in one setup starts all components. There are fifteen containers in this con
 
 ```sh
 docker-compose \
-    -f compose-lb.yml \
     -f compose-masters.yml \
     -f compose-monitoring.yml \
     -f compose-tservers-shared.yml \
@@ -70,7 +69,6 @@ Remove containers:
 
 ```sh
 docker-compose \
-    -f compose-lb.yml \
     -f compose-masters.yml \
     -f compose-monitoring.yml \
     -f compose-tservers-shared.yml \
@@ -105,7 +103,6 @@ The core infrastructure is assumed to be:
 
 ```sh
 docker-compose \
-    -f compose-lb.yml \
     -f compose-masters.yml \
     -f compose-monitoring.yml \
     -f compose-tservers-shared.yml \

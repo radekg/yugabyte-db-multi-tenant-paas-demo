@@ -14,6 +14,20 @@ volumes:
 
 services:
 
+  envoy-yb-tenant1:
+    image: envoyproxy/envoy:v1.18.4
+    restart: unless-stopped
+    container_name: envoy-yb-tenant1
+    command: /usr/local/bin/envoy -c /etc/envoy/envoy-yb-tenant1.yaml -l debug
+    ports:
+      - 35433:35432
+    volumes:
+      - type: bind
+        source: ./etc/envoy/envoy-yb-tenant1.yaml
+        target: /etc/envoy/envoy-yb-tenant1.yaml
+    networks:
+      - yb-dbnet
+
   yb-tserver-tenant1-1:
     image: local/yugabyte:2.9.0.0-b4
     container_name: yb-tserver-tenant1-1
@@ -32,14 +46,6 @@ services:
       "--placement_region=tenant1",
       "--placement_zone=tenant1a",
       "--ysql_pg_conf_csv=shared_preload_libraries=dsh"]
-    labels:
-      - "traefik.enable=true"
-      - "yugabyte.enable=true"
-      - "traefik.tcp.routers.yb-tenant1-1-tservers.rule=HostSNI(`*`)"
-      - "traefik.tcp.routers.yb-tenant1-1-tservers.entrypoints=yb-postgres-tenant1"
-      - "traefik.tcp.routers.yb-tenant1-1-tservers.service=tenant1-tservers"
-      - "traefik.tcp.services.tenant1-tservers.loadbalancer.server.address=yb-tserver-tenant1-1"
-      - "traefik.tcp.services.tenant1-tservers.loadbalancer.server.port=5433"
 
   yb-tserver-tenant1-2:
     image: local/yugabyte:2.9.0.0-b4
@@ -59,14 +65,6 @@ services:
       "--placement_region=tenant1",
       "--placement_zone=tenant1a",
       "--ysql_pg_conf_csv=shared_preload_libraries=dsh"]
-    labels:
-      - "traefik.enable=true"
-      - "yugabyte.enable=true"
-      - "traefik.tcp.routers.yb-tenant1-2-tservers.rule=HostSNI(`*`)"
-      - "traefik.tcp.routers.yb-tenant1-2-tservers.entrypoints=yb-postgres-tenant1"
-      - "traefik.tcp.routers.yb-tenant1-2-tservers.service=tenant1-tservers"
-      - "traefik.tcp.services.tenant1-tservers.loadbalancer.server.address=yb-tserver-tenant1-2"
-      - "traefik.tcp.services.tenant1-tservers.loadbalancer.server.port=5433"
 
   yb-tserver-tenant1-3:
     image: local/yugabyte:2.9.0.0-b4
@@ -86,11 +84,3 @@ services:
       "--placement_region=tenant1",
       "--placement_zone=tenant1a",
       "--ysql_pg_conf_csv=shared_preload_libraries=dsh"]
-    labels:
-      - "traefik.enable=true"
-      - "yugabyte.enable=true"
-      - "traefik.tcp.routers.yb-tenant1-3-tservers.rule=HostSNI(`*`)"
-      - "traefik.tcp.routers.yb-tenant1-3-tservers.entrypoints=yb-postgres-tenant1"
-      - "traefik.tcp.routers.yb-tenant1-3-tservers.service=tenant1-tservers"
-      - "traefik.tcp.services.tenant1-tservers.loadbalancer.server.address=yb-tserver-tenant1-3"
-      - "traefik.tcp.services.tenant1-tservers.loadbalancer.server.port=5433"
