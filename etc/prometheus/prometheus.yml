@@ -20,6 +20,12 @@ rule_files:
 # Here it's Prometheus itself.
 scrape_configs:
 
+  - job_name: 'load-balancer'
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['yb-traefik:9090']
+        labels:
+          export_type: "load_balancer"
   - job_name: 'yb-masters'
     metrics_path: /prometheus-metrics
     static_configs:

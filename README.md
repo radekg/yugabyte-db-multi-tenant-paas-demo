@@ -133,9 +133,9 @@ Onboard tenant 1:
 ```sh
 psql "host=localhost port=35432 dbname=yugabyte user=yugabyte" \
     -f sql-init-tenant1.sql
-psql "host=localhost port=35432 dbname=tenant1db user=tenant1" \
+psql "host=localhost port=35433 dbname=tenant1db user=tenant1" \
     -f sql-init-northwind-tenant1.sql
-psql "host=localhost port=35432 dbname=tenant1db user=tenant1" \
+psql "host=localhost port=35433 dbname=tenant1db user=tenant1" \
     -f sql-init-northwind-data-tenant1.sql
 ```
 

@@ -20,15 +20,16 @@ services:
     networks:
       - yb-dbnet
     volumes:
-      - vol_yb_shared_1:/mnt/tserver:rw
-    command: [ "/docker-entrypoint.sh", "/home/yugabyte/bin/yb-tserver",
-      "--fs_data_dirs=/mnt/tserver",
+      - vol_yb_shared_1:/mnt/data/tserver:rw
+    command: [ "/docker-entrypoint.sh", "/home/ybdsh/bin/yb-tserver",
+      "--fs_data_dirs=/mnt/data/tserver",
       "--enable_ysql",
       "--ysql_enable_auth",
       "--logtostderr",
       "--rpc_bind_addresses=yb-tserver-shared-1:9100",
       "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
-      "--placement_cloud=docker"]
+      "--placement_cloud=docker",
+      "--ysql_pg_conf_csv=shared_preload_libraries=dsh"]
     labels:
       - "traefik.enable=true"
       - "yugabyte.enable=true"
@@ -44,15 +45,16 @@ services:
     networks:
       - yb-dbnet
     volumes:
-      - vol_yb_shared_2:/mnt/tserver:rw
-    command: [ "/docker-entrypoint.sh", "/home/yugabyte/bin/yb-tserver",
-      "--fs_data_dirs=/mnt/tserver",
+      - vol_yb_shared_2:/mnt/data/tserver:rw
+    command: [ "/docker-entrypoint.sh", "/home/ybdsh/bin/yb-tserver",
+      "--fs_data_dirs=/mnt/data/tserver",
       "--enable_ysql",
       "--ysql_enable_auth",
       "--logtostderr",
       "--rpc_bind_addresses=yb-tserver-shared-2:9100",
       "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
-      "--placement_cloud=docker"]
+      "--placement_cloud=docker",
+      "--ysql_pg_conf_csv=shared_preload_libraries=dsh"]
     labels:
       - "traefik.enable=true"
       - "yugabyte.enable=true"
@@ -68,15 +70,16 @@ services:
     networks:
       - yb-dbnet
     volumes:
-      - vol_yb_shared_3:/mnt/tserver:rw
-    command: [ "/docker-entrypoint.sh", "/home/yugabyte/bin/yb-tserver",
-      "--fs_data_dirs=/mnt/tserver",
+      - vol_yb_shared_3:/mnt/data/tserver:rw
+    command: [ "/docker-entrypoint.sh", "/home/ybdsh/bin/yb-tserver",
+      "--fs_data_dirs=/mnt/data/tserver",
       "--enable_ysql",
       "--ysql_enable_auth",
       "--logtostderr",
       "--rpc_bind_addresses=yb-tserver-shared-3:9100",
       "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
-      "--placement_cloud=docker"]
+      "--placement_cloud=docker",
+      "--ysql_pg_conf_csv=shared_preload_libraries=dsh"]
     labels:
       - "traefik.enable=true"
       - "yugabyte.enable=true"

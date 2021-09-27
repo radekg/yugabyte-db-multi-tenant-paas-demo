@@ -3,12 +3,20 @@
     sendAnonymousUsage = false
 
 [entryPoints]
+    [entryPoints.metrics]
+        address = ":9090"
     [entryPoints.yb-postgres-shared]
         address = ":35432"
     [entryPoints.yb-postgres-tenant1]
         address = ":35433"
     [entryPoints.yb-postgres-tenant2]
         address = ":35434"
+
+[metrics]
+    [metrics.prometheus]
+        addRoutersLabels = true
+        addServicesLabels = true
+        entryPoint = "metrics"
 
 [providers]
     [providers.docker]

@@ -22,9 +22,9 @@ services:
     ports:
       - 7000:7000
     volumes:
-      - vol_yb_master_1:/mnt/master:rw
-    command: [ "/docker-entrypoint.sh", "/home/yugabyte/bin/yb-master",
-      "--fs_data_dirs=/mnt/master",
+      - vol_yb_master_1:/mnt/data/master:rw
+    command: [ "/docker-entrypoint.sh", "/home/ybdsh/bin/yb-master",
+      "--fs_data_dirs=/mnt/data/master",
       "--master_addresses=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
       "--rpc_bind_addresses=yb-master-n1:7100",
       "--logtostderr",
@@ -38,9 +38,9 @@ services:
     networks:
       - yb-dbnet
     volumes:
-      - vol_yb_master_2:/mnt/master:rw
-    command: [ "/docker-entrypoint.sh", "/home/yugabyte/bin/yb-master",
-      "--fs_data_dirs=/mnt/master",
+      - vol_yb_master_2:/mnt/data/master:rw
+    command: [ "/docker-entrypoint.sh", "/home/ybdsh/bin/yb-master",
+      "--fs_data_dirs=/mnt/data/master",
       "--master_addresses=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
       "--rpc_bind_addresses=yb-master-n2:7100",
       "--logtostderr",
@@ -54,9 +54,9 @@ services:
     networks:
       - yb-dbnet
     volumes:
-      - vol_yb_master_3:/mnt/master:rw
-    command: [ "/docker-entrypoint.sh", "/home/yugabyte/bin/yb-master",
-      "--fs_data_dirs=/mnt/master",
+      - vol_yb_master_3:/mnt/data/master:rw
+    command: [ "/docker-entrypoint.sh", "/home/ybdsh/bin/yb-master",
+      "--fs_data_dirs=/mnt/data/master",
       "--master_addresses=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
       "--rpc_bind_addresses=yb-master-n3:7100",
       "--logtostderr",
