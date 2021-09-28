@@ -20,6 +20,24 @@ rule_files:
 # Here it's Prometheus itself.
 scrape_configs:
 
+  - job_name: 'yb-lb-shared'
+    metrics_path: /stats/prometheus
+    static_configs:
+      - targets: ['envoy-yb-shared:8001']
+        labels:
+          export_type: "lb"
+  - job_name: 'yb-lb-tenant1'
+    metrics_path: /stats/prometheus
+    static_configs:
+      - targets: ['envoy-yb-tenant1:8001']
+        labels:
+          export_type: "lb"
+  - job_name: 'yb-lb-tenant2'
+    metrics_path: /stats/prometheus
+    static_configs:
+      - targets: ['envoy-yb-tenant2:8001']
+        labels:
+          export_type: "lb"
   - job_name: 'yb-masters'
     metrics_path: /prometheus-metrics
     static_configs:
