@@ -35,7 +35,7 @@ services:
       - yb-dbnet
     volumes:
       - vol_yb_tenant2_1:${YB_MOUNT_PREFIX}/tserver:rw
-    command: [ "/docker-entrypoint.sh", "/home/yugabyte/bin/yb-tserver",
+    command: [ "/docker-entrypoint.sh", "/home/${YB_USER}/bin/yb-tserver",
       "--fs_data_dirs=${YB_MOUNT_PREFIX}/tserver",
       "--enable_ysql",
       "--ysql_enable_auth",
@@ -54,7 +54,7 @@ services:
       - yb-dbnet
     volumes:
       - vol_yb_tenant2_2:${YB_MOUNT_PREFIX}/tserver:rw
-    command: [ "/docker-entrypoint.sh", "/home/yugabyte/bin/yb-tserver",
+    command: [ "/docker-entrypoint.sh", "/home/${YB_USER}/bin/yb-tserver",
       "--fs_data_dirs=${YB_MOUNT_PREFIX}/tserver",
       "--enable_ysql",
       "--ysql_enable_auth",
@@ -73,7 +73,7 @@ services:
       - yb-dbnet
     volumes:
       - vol_yb_tenant2_3:${YB_MOUNT_PREFIX}/tserver:rw
-    command: [ "/docker-entrypoint.sh", "/home/yugabyte/bin/yb-tserver",
+    command: [ "/docker-entrypoint.sh", "/home/${YB_USER}/bin/yb-tserver",
       "--fs_data_dirs=${YB_MOUNT_PREFIX}/tserver",
       "--enable_ysql",
       "--ysql_enable_auth",
