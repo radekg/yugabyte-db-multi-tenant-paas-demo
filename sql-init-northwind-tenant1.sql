@@ -11,7 +11,7 @@ SET client_min_messages = warning;
 
 
 
-SET default_tablespace = tenant1tb;
+SET default_tablespace = '';
 
 SET default_with_oids = false;
 

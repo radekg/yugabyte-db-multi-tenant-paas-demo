@@ -8,3 +8,5 @@ revoke all privileges on tablespace pg_global from tenant1;
 grant all on tablespace tenant1tb to tenant1 with grant option;
 alter role tenant1 set default_tablespace = 'tenant1tb';
 alter role tenant1 set temp_tablespaces = 'tenant1tb';
+\connect tenant1db
+create extension if not exists dsh;

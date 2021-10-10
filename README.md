@@ -20,6 +20,12 @@ If you _really, really_ want to change the _admin_ user password, change the _./
 
 Grafana instance comes with the Prometheus _YBPrometheus_ datasource.
 
+## Prereqs
+
+```sh
+export DC_ENV_FILE=.env
+```
+
 ## All in one infrastructure
 
 All in one setup starts all components. There are fifteen containers in this configuration.
@@ -27,7 +33,7 @@ All in one setup starts all components. There are fifteen containers in this con
 ### Start all in one
 
 ```sh
-docker-compose \
+docker-compose --env-file "$(pwd)/${DC_ENV_FILE}" \
     -f compose-masters.yml \
     -f compose-monitoring.yml \
     -f compose-tservers-shared.yml \
@@ -102,7 +108,7 @@ This scenario assumes that that a tenant is going to be decommissioned from the 
 The core infrastructure is assumed to be:
 
 ```sh
-docker-compose \
+docker-compose --env-file "$(pwd)/${DC_ENV_FILE}" \
     -f compose-masters.yml \
     -f compose-monitoring.yml \
     -f compose-tservers-shared.yml \
@@ -112,7 +118,7 @@ docker-compose \
 In another terminal, start tenant 1 TServers:
 
 ```sh
-docker-compose \
+docker-compose --env-file "$(pwd)/${DC_ENV_FILE}" \
     -f compose-tservers-tenant1.yml \
     up
 ```
@@ -120,7 +126,7 @@ docker-compose \
 **Optionally**, start tenant 2 TServers in yet one more terminal:
 
 ```sh
-docker-compose \
+docker-compose --env-file "$(pwd)/${DC_ENV_FILE}" \
     -f compose-tservers-tenant2.yml \
     up
 ```
@@ -181,7 +187,7 @@ docker volume rm \
 If the tenant is to be re-onboarded, start TServers again:
 
 ```sh
-docker-compose -f compose-tservers-tenant1.yml up
+docker-compose --env-file "$(pwd)/${DC_ENV_FILE}" -f compose-tservers-tenant1.yml up
 ```
 
 These TServers are still in the blacklist so they need to be relisted. Remove them from the blacklist:
@@ -210,6 +216,8 @@ docker exec -ti yb-master-n1 /bin/bash -c \
         'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 list_all_masters'
 docker exec -ti yb-master-n1 /bin/bash -c \
         'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 list_all_tablet_servers'
+docker exec -ti yb-master-n1 /bin/bash -c \
+        'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 get_load_move_completion'
 ```
 
 List tablets on a tablet server:

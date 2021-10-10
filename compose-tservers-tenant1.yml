@@ -29,14 +29,14 @@ services:
       - yb-dbnet
 
   yb-tserver-tenant1-1:
-    image: local/yugabyte:2.9.0.0-b4
+    image: ${YB_IMAGE}
     container_name: yb-tserver-tenant1-1
     networks:
       - yb-dbnet
     volumes:
-      - vol_yb_tenant1_1:/mnt/tserver:rw
-    command: [ "/docker-entrypoint.sh", "/home/yugabyte/bin/yb-tserver",
-      "--fs_data_dirs=/mnt/tserver",
+      - vol_yb_tenant1_1:${YB_MOUNT_PREFIX}/tserver:rw
+    command: [ "/docker-entrypoint.sh", "/home/${YB_USER}/bin/yb-tserver",
+      "--fs_data_dirs=${YB_MOUNT_PREFIX}/tserver",
       "--enable_ysql",
       "--ysql_enable_auth",
       "--logtostderr",
@@ -44,17 +44,18 @@ services:
       "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
       "--placement_cloud=docker",
       "--placement_region=tenant1",
-      "--placement_zone=tenant1a"]
+      "--placement_zone=tenant1a",
+      "${YB_EXT_FLAGS}"]
 
   yb-tserver-tenant1-2:
-    image: local/yugabyte:2.9.0.0-b4
+    image: ${YB_IMAGE}
     container_name: yb-tserver-tenant1-2
     networks:
       - yb-dbnet
     volumes:
-      - vol_yb_tenant1_2:/mnt/tserver:rw
-    command: [ "/docker-entrypoint.sh", "/home/yugabyte/bin/yb-tserver",
-      "--fs_data_dirs=/mnt/tserver",
+      - vol_yb_tenant1_2:${YB_MOUNT_PREFIX}/tserver:rw
+    command: [ "/docker-entrypoint.sh", "/home/${YB_USER}/bin/yb-tserver",
+      "--fs_data_dirs=${YB_MOUNT_PREFIX}/tserver",
       "--enable_ysql",
       "--ysql_enable_auth",
       "--logtostderr",
@@ -62,17 +63,18 @@ services:
       "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
       "--placement_cloud=docker",
       "--placement_region=tenant1",
-      "--placement_zone=tenant1a"]
+      "--placement_zone=tenant1a",
+      "${YB_EXT_FLAGS}"]
 
   yb-tserver-tenant1-3:
-    image: local/yugabyte:2.9.0.0-b4
+    image: ${YB_IMAGE}
     container_name: yb-tserver-tenant1-3
     networks:
       - yb-dbnet
     volumes:
-      - vol_yb_tenant1_3:/mnt/tserver:rw
-    command: [ "/docker-entrypoint.sh", "/home/yugabyte/bin/yb-tserver",
-      "--fs_data_dirs=/mnt/tserver",
+      - vol_yb_tenant1_3:${YB_MOUNT_PREFIX}/tserver:rw
+    command: [ "/docker-entrypoint.sh", "/home/${YB_USER}/bin/yb-tserver",
+      "--fs_data_dirs=${YB_MOUNT_PREFIX}/tserver",
       "--enable_ysql",
       "--ysql_enable_auth",
       "--logtostderr",
@@ -80,4 +82,5 @@ services:
       "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
       "--placement_cloud=docker",
       "--placement_region=tenant1",
-      "--placement_zone=tenant1a"]
+      "--placement_zone=tenant1a",
+      "${YB_EXT_FLAGS}"]
