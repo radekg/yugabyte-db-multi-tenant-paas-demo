@@ -39,6 +39,7 @@ docker-compose --env-file "$(pwd)/${DC_ENV_FILE}" \
     -f compose-tservers-shared.yml \
     -f compose-tservers-tenant1.yml \
     -f compose-tservers-tenant2.yml \
+    -f compose-tservers-tenant3.yml \
     up
 ```
 
@@ -54,9 +55,9 @@ psql "host=localhost port=35432 dbname=yugabyte user=yugabyte" \
 Followed by creating Northwind ojects in the _tenant1db_ as _tenant1_:
 
 ```sh
-psql "host=localhost port=35432 dbname=tenant1db user=tenant1" \
+psql "host=localhost port=35433 dbname=tenant1db user=tenant1" \
     -f sql-init-northwind-tenant1.sql
-psql "host=localhost port=35432 dbname=tenant1db user=tenant1" \
+psql "host=localhost port=35433 dbname=tenant1db user=tenant1" \
     -f sql-init-northwind-data-tenant1.sql
 ```
 
@@ -64,6 +65,7 @@ Connect as a tenant:
 
 - `tenant 1`: `psql "host=localhost port=35433 dbname=tenant1db user=tenant1"`
 - `tenant 2`: `psql "host=localhost port=35434 dbname=tenant2db user=tenant2"`
+- `tenant 3`: `psql "host=localhost port=35434 dbname=tenant3db user=tenant3"`
 
 Optionally, connect to _shared_ TServers:
 
@@ -80,6 +82,7 @@ docker-compose \
     -f compose-tservers-shared.yml \
     -f compose-tservers-tenant1.yml \
     -f compose-tservers-tenant2.yml \
+    -f compose-tservers-tenant3.yml \
     rm
 ```
 
@@ -96,6 +99,9 @@ docker volume rm \
     vol_yb_tenant2_1 \
     vol_yb_tenant2_2 \
     vol_yb_tenant2_3 \
+    vol_yb_tenant3_1 \
+    vol_yb_tenant3_2 \
+    vol_yb_tenant3_3 \
     vol_yb_shared_1 \
     vol_yb_shared_2 \
     vol_yb_shared_3
@@ -153,18 +159,7 @@ psql "host=localhost port=35432 dbname=yugabyte user=yugabyte" -f sql-wipe-tenan
 Place TServers in the blacklist. This will prevent the remote bootstrap subsystem from further communication with TServers which we want to remove.
 
 ```sh
-docker exec -ti yb-master-n1 /bin/bash -c \
-    'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 change_leader_blacklist ADD yb-tserver-tenant1-1:9100'
-docker exec -ti yb-master-n1 /bin/bash -c \
-    'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 change_leader_blacklist ADD yb-tserver-tenant1-2:9100'
-docker exec -ti yb-master-n1 /bin/bash -c \
-    'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 change_leader_blacklist ADD yb-tserver-tenant1-3:9100'
-docker exec -ti yb-master-n1 /bin/bash -c \
-    'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 change_blacklist ADD yb-tserver-tenant1-1:9100'
-docker exec -ti yb-master-n1 /bin/bash -c \
-    'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 change_blacklist ADD yb-tserver-tenant1-2:9100'
-docker exec -ti yb-master-n1 /bin/bash -c \
-    'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 change_blacklist ADD yb-tserver-tenant1-3:9100'
+./tenant1-blacklist.sh
 ```
 
 Once the blacklist has been updated, wait for `Active Tablet-Peers` for these TServers to come down to `0`. Stop containers with `CTRL+C` in the relevant terminal. Next, remove the containers:
@@ -193,18 +188,7 @@ docker-compose --env-file "$(pwd)/${DC_ENV_FILE}" -f compose-tservers-tenant1.ym
 These TServers are still in the blacklist so they need to be relisted. Remove them from the blacklist:
 
 ```sh
-docker exec -ti yb-master-n1 /bin/bash -c \
-    'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 change_leader_blacklist REMOVE yb-tserver-tenant1-1:9100'
-docker exec -ti yb-master-n1 /bin/bash -c \
-    'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 change_leader_blacklist REMOVE yb-tserver-tenant1-2:9100'
-docker exec -ti yb-master-n1 /bin/bash -c \
-    'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 change_leader_blacklist REMOVE yb-tserver-tenant1-3:9100'
-docker exec -ti yb-master-n1 /bin/bash -c \
-    'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 change_blacklist REMOVE yb-tserver-tenant1-1:9100'
-docker exec -ti yb-master-n1 /bin/bash -c \
-    'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 change_blacklist REMOVE yb-tserver-tenant1-2:9100'
-docker exec -ti yb-master-n1 /bin/bash -c \
-    'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 change_blacklist REMOVE yb-tserver-tenant1-3:9100'
+./tenant1-whitelist.sh
 ```
 
 The cluster will take some time to reconcile. When finished, tenant can be reinitialized and relevant backups can be restored.
@@ -213,11 +197,11 @@ The cluster will take some time to reconcile. When finished, tenant can be reini
 
 ```sh
 docker exec -ti yb-master-n1 /bin/bash -c \
-        'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 list_all_masters'
+    'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 list_all_masters'
 docker exec -ti yb-master-n1 /bin/bash -c \
-        'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 list_all_tablet_servers'
+    'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 list_all_tablet_servers'
 docker exec -ti yb-master-n1 /bin/bash -c \
-        'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 get_load_move_completion'
+    'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 get_load_move_completion'
 ```
 
 List tablets on a tablet server:
