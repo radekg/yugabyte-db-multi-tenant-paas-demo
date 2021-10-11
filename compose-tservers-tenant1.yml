@@ -46,6 +46,14 @@ services:
       "--placement_region=tenant1",
       "--placement_zone=tenant1a",
       "${YB_EXT_FLAGS}"]
+    deploy:
+      resources:
+        limits:
+          cpus: "${YB_RESOURCES_CPU_LIMIT}"
+          memory: "${YB_RESOURCES_MEM_LIMIT}"
+        reservations:
+          cpus: "${YB_RESOURCES_CPU_RESERVATION}"
+          memory: "${YB_RESOURCES_MEM_RESERVATION}"
 
   yb-tserver-tenant1-2:
     image: ${YB_IMAGE}
@@ -65,6 +73,14 @@ services:
       "--placement_region=tenant1",
       "--placement_zone=tenant1a",
       "${YB_EXT_FLAGS}"]
+    deploy:
+      resources:
+        limits:
+          cpus: "${YB_RESOURCES_CPU_LIMIT}"
+          memory: "${YB_RESOURCES_MEM_LIMIT}"
+        reservations:
+          cpus: "${YB_RESOURCES_CPU_RESERVATION}"
+          memory: "${YB_RESOURCES_MEM_RESERVATION}"
 
   yb-tserver-tenant1-3:
     image: ${YB_IMAGE}
@@ -84,3 +100,11 @@ services:
       "--placement_region=tenant1",
       "--placement_zone=tenant1a",
       "${YB_EXT_FLAGS}"]
+    deploy:
+      resources:
+        limits:
+          cpus: "${YB_RESOURCES_CPU_LIMIT}"
+          memory: "${YB_RESOURCES_MEM_LIMIT}"
+        reservations:
+          cpus: "${YB_RESOURCES_CPU_RESERVATION}"
+          memory: "${YB_RESOURCES_MEM_RESERVATION}"

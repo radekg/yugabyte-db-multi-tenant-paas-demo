@@ -44,6 +44,14 @@ services:
       "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
       "--placement_cloud=docker",
       "${YB_EXT_FLAGS}"]
+    deploy:
+      resources:
+        limits:
+          cpus: "${YB_RESOURCES_CPU_LIMIT}"
+          memory: "${YB_RESOURCES_MEM_LIMIT}"
+        reservations:
+          cpus: "${YB_RESOURCES_CPU_RESERVATION}"
+          memory: "${YB_RESOURCES_MEM_RESERVATION}"
 
   yb-tserver-shared-2:
     image: ${YB_IMAGE}
@@ -61,6 +69,14 @@ services:
       "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
       "--placement_cloud=docker",
       "${YB_EXT_FLAGS}"]
+    deploy:
+      resources:
+        limits:
+          cpus: "${YB_RESOURCES_CPU_LIMIT}"
+          memory: "${YB_RESOURCES_MEM_LIMIT}"
+        reservations:
+          cpus: "${YB_RESOURCES_CPU_RESERVATION}"
+          memory: "${YB_RESOURCES_MEM_RESERVATION}"
 
   yb-tserver-shared-3:
     image: ${YB_IMAGE}
@@ -78,3 +94,11 @@ services:
       "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
       "--placement_cloud=docker",
       "${YB_EXT_FLAGS}"]
+    deploy:
+      resources:
+        limits:
+          cpus: "${YB_RESOURCES_CPU_LIMIT}"
+          memory: "${YB_RESOURCES_MEM_LIMIT}"
+        reservations:
+          cpus: "${YB_RESOURCES_CPU_RESERVATION}"
+          memory: "${YB_RESOURCES_MEM_RESERVATION}"

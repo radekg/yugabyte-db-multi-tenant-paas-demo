@@ -38,6 +38,12 @@ scrape_configs:
       - targets: ['envoy-yb-tenant2:8001']
         labels:
           export_type: "lb"
+  - job_name: 'yb-lb-tenant3'
+    metrics_path: /stats/prometheus
+    static_configs:
+      - targets: ['envoy-yb-tenant3:8001']
+        labels:
+          export_type: "lb"
   - job_name: 'yb-masters'
     metrics_path: /prometheus-metrics
     static_configs:
@@ -62,6 +68,12 @@ scrape_configs:
       - targets: ['yb-tserver-tenant2-1:9000','yb-tserver-tenant2-2:9000','yb-tserver-tenant2-3:9000']
         labels:
           export_type: "tserver_export"
+  - job_name: 'yb-tservers-tenant3'
+    metrics_path: /prometheus-metrics
+    static_configs:
+      - targets: ['yb-tserver-tenant3-1:9000','yb-tserver-tenant3-2:9000','yb-tserver-tenant3-3:9000']
+        labels:
+          export_type: "tserver_export"
   - job_name: 'yb-shared-psql'
     metrics_path: /prometheus-metrics
     static_configs:
@@ -78,5 +90,11 @@ scrape_configs:
     metrics_path: /prometheus-metrics
     static_configs:
       - targets: ['yb-tserver-tenant2-1:13000','yb-tserver-tenant2-2:13000','yb-tserver-tenant2-3:13000']
+        labels:
+          export_type: "ysql_export"
+  - job_name: 'yb-tenant3-psql'
+    metrics_path: /prometheus-metrics
+    static_configs:
+      - targets: ['yb-tserver-tenant3-1:13000','yb-tserver-tenant3-2:13000','yb-tserver-tenant3-3:13000']
         labels:
           export_type: "ysql_export"
