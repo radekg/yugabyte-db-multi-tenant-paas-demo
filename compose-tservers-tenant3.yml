@@ -14,7 +14,7 @@ volumes:
 
 services:
 
-  envoy-yb-tenant2:
+  envoy-yb-tenan3:
     image: envoyproxy/envoy:v1.19.1
     restart: unless-stopped
     container_name: envoy-yb-tenant3
