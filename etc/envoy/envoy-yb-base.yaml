@@ -27,17 +27,47 @@ static_resources:
         - endpoint:
             address:
               socket_address:
-                address: yb-tserver-shared-1
+                address: yb-tserver-base1-1
                 port_value: 5433
         - endpoint:
             address:
               socket_address:
-                address: yb-tserver-shared-2
+                address: yb-tserver-base1-2
                 port_value: 5433
         - endpoint:
             address:
               socket_address:
-                address: yb-tserver-shared-3
+                address: yb-tserver-base1-3
+                port_value: 5433
+        - endpoint:
+            address:
+              socket_address:
+                address: yb-tserver-base2-1
+                port_value: 5433
+        - endpoint:
+            address:
+              socket_address:
+                address: yb-tserver-base2-2
+                port_value: 5433
+        - endpoint:
+            address:
+              socket_address:
+                address: yb-tserver-base2-3
+                port_value: 5433
+        - endpoint:
+            address:
+              socket_address:
+                address: yb-tserver-base3-1
+                port_value: 5433
+        - endpoint:
+            address:
+              socket_address:
+                address: yb-tserver-base3-2
+                port_value: 5433
+        - endpoint:
+            address:
+              socket_address:
+                address: yb-tserver-base3-3
                 port_value: 5433
 admin:
   address:

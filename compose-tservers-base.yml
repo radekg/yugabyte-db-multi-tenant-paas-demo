@@ -1,0 +1,290 @@
+version: '3.9'
+
+networks:
+  yb-dbnet:
+    name: yb-dbnet
+
+volumes:
+  vol_yb_base1_1:
+    name: vol_yb_base1_1
+  vol_yb_base1_2:
+    name: vol_yb_base1_2
+  vol_yb_base1_3:
+    name: vol_yb_base1_3
+  vol_yb_base2_1:
+    name: vol_yb_base2_1
+  vol_yb_base2_2:
+    name: vol_yb_base2_2
+  vol_yb_base2_3:
+    name: vol_yb_base2_3
+  vol_yb_base3_1:
+    name: vol_yb_base3_1
+  vol_yb_base3_2:
+    name: vol_yb_base3_2
+  vol_yb_base3_3:
+    name: vol_yb_base3_3
+
+services:
+
+  envoy-yb-base:
+    image: envoyproxy/envoy:v1.19.1
+    restart: unless-stopped
+    container_name: envoy-yb-base
+    command: /usr/local/bin/envoy -c /etc/envoy/envoy-yb-base.yaml #-l debug
+    ports:
+      - 35432:35432
+    volumes:
+      - type: bind
+        source: ./etc/envoy/envoy-yb-base.yaml
+        target: /etc/envoy/envoy-yb-base.yaml
+    networks:
+      - yb-dbnet
+
+  # Base 1
+
+  yb-tserver-base1-1:
+    image: ${YB_IMAGE}
+    container_name: yb-tserver-base1-1
+    networks:
+      - yb-dbnet
+    volumes:
+      - vol_yb_base1_1:${YB_MOUNT_PREFIX}/tserver:rw
+    command: [ "/docker-entrypoint.sh", "/home/${YB_USER}/bin/yb-tserver",
+      "--fs_data_dirs=${YB_MOUNT_PREFIX}/tserver",
+      "--enable_ysql",
+      "--ysql_enable_auth",
+      "--logtostderr",
+      "--rpc_bind_addresses=yb-tserver-base1-1:9100",
+      "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
+      "--placement_cloud=docker",
+      "--placement_region=base1",
+      "--placement_zone=base1a",
+      "${YB_EXT_FLAGS}"]
+    deploy:
+      resources:
+        limits:
+          cpus: "${YB_RESOURCES_CPU_LIMIT}"
+          memory: "${YB_RESOURCES_MEM_LIMIT}"
+        reservations:
+          cpus: "${YB_RESOURCES_CPU_RESERVATION}"
+          memory: "${YB_RESOURCES_MEM_RESERVATION}"
+
+  yb-tserver-base1-2:
+    image: ${YB_IMAGE}
+    container_name: yb-tserver-base1-2
+    networks:
+      - yb-dbnet
+    volumes:
+      - vol_yb_base1_2:${YB_MOUNT_PREFIX}/tserver:rw
+    command: [ "/docker-entrypoint.sh", "/home/${YB_USER}/bin/yb-tserver",
+      "--fs_data_dirs=${YB_MOUNT_PREFIX}/tserver",
+      "--enable_ysql",
+      "--ysql_enable_auth",
+      "--logtostderr",
+      "--rpc_bind_addresses=yb-tserver-base1-2:9100",
+      "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
+      "--placement_cloud=docker",
+      "--placement_region=base1",
+      "--placement_zone=base1a",
+      "${YB_EXT_FLAGS}"]
+    deploy:
+      resources:
+        limits:
+          cpus: "${YB_RESOURCES_CPU_LIMIT}"
+          memory: "${YB_RESOURCES_MEM_LIMIT}"
+        reservations:
+          cpus: "${YB_RESOURCES_CPU_RESERVATION}"
+          memory: "${YB_RESOURCES_MEM_RESERVATION}"
+
+  yb-tserver-base1-3:
+    image: ${YB_IMAGE}
+    container_name: yb-tserver-base1-3
+    networks:
+      - yb-dbnet
+    volumes:
+      - vol_yb_base1_3:${YB_MOUNT_PREFIX}/tserver:rw
+    command: [ "/docker-entrypoint.sh", "/home/${YB_USER}/bin/yb-tserver",
+      "--fs_data_dirs=${YB_MOUNT_PREFIX}/tserver",
+      "--enable_ysql",
+      "--ysql_enable_auth",
+      "--logtostderr",
+      "--rpc_bind_addresses=yb-tserver-base1-3:9100",
+      "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
+      "--placement_cloud=docker",
+      "--placement_region=base1",
+      "--placement_zone=base1a",
+      "${YB_EXT_FLAGS}"]
+    deploy:
+      resources:
+        limits:
+          cpus: "${YB_RESOURCES_CPU_LIMIT}"
+          memory: "${YB_RESOURCES_MEM_LIMIT}"
+        reservations:
+          cpus: "${YB_RESOURCES_CPU_RESERVATION}"
+          memory: "${YB_RESOURCES_MEM_RESERVATION}"
+  
+  # Base 2:
+
+  yb-tserver-base2-1:
+    image: ${YB_IMAGE}
+    container_name: yb-tserver-base2-1
+    networks:
+      - yb-dbnet
+    volumes:
+      - vol_yb_base2_1:${YB_MOUNT_PREFIX}/tserver:rw
+    command: [ "/docker-entrypoint.sh", "/home/${YB_USER}/bin/yb-tserver",
+      "--fs_data_dirs=${YB_MOUNT_PREFIX}/tserver",
+      "--enable_ysql",
+      "--ysql_enable_auth",
+      "--logtostderr",
+      "--rpc_bind_addresses=yb-tserver-base2-1:9100",
+      "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
+      "--placement_cloud=docker",
+      "--placement_region=base2",
+      "--placement_zone=base2a",
+      "${YB_EXT_FLAGS}"]
+    deploy:
+      resources:
+        limits:
+          cpus: "${YB_RESOURCES_CPU_LIMIT}"
+          memory: "${YB_RESOURCES_MEM_LIMIT}"
+        reservations:
+          cpus: "${YB_RESOURCES_CPU_RESERVATION}"
+          memory: "${YB_RESOURCES_MEM_RESERVATION}"
+
+  yb-tserver-base2-2:
+    image: ${YB_IMAGE}
+    container_name: yb-tserver-base2-2
+    networks:
+      - yb-dbnet
+    volumes:
+      - vol_yb_base2_2:${YB_MOUNT_PREFIX}/tserver:rw
+    command: [ "/docker-entrypoint.sh", "/home/${YB_USER}/bin/yb-tserver",
+      "--fs_data_dirs=${YB_MOUNT_PREFIX}/tserver",
+      "--enable_ysql",
+      "--ysql_enable_auth",
+      "--logtostderr",
+      "--rpc_bind_addresses=yb-tserver-base2-2:9100",
+      "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
+      "--placement_cloud=docker",
+      "--placement_region=base2",
+      "--placement_zone=base2a",
+      "${YB_EXT_FLAGS}"]
+    deploy:
+      resources:
+        limits:
+          cpus: "${YB_RESOURCES_CPU_LIMIT}"
+          memory: "${YB_RESOURCES_MEM_LIMIT}"
+        reservations:
+          cpus: "${YB_RESOURCES_CPU_RESERVATION}"
+          memory: "${YB_RESOURCES_MEM_RESERVATION}"
+
+  yb-tserver-base2-3:
+    image: ${YB_IMAGE}
+    container_name: yb-tserver-base2-3
+    networks:
+      - yb-dbnet
+    volumes:
+      - vol_yb_base2_3:${YB_MOUNT_PREFIX}/tserver:rw
+    command: [ "/docker-entrypoint.sh", "/home/${YB_USER}/bin/yb-tserver",
+      "--fs_data_dirs=${YB_MOUNT_PREFIX}/tserver",
+      "--enable_ysql",
+      "--ysql_enable_auth",
+      "--logtostderr",
+      "--rpc_bind_addresses=yb-tserver-base2-3:9100",
+      "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
+      "--placement_cloud=docker",
+      "--placement_region=base2",
+      "--placement_zone=base2a",
+      "${YB_EXT_FLAGS}"]
+    deploy:
+      resources:
+        limits:
+          cpus: "${YB_RESOURCES_CPU_LIMIT}"
+          memory: "${YB_RESOURCES_MEM_LIMIT}"
+        reservations:
+          cpus: "${YB_RESOURCES_CPU_RESERVATION}"
+          memory: "${YB_RESOURCES_MEM_RESERVATION}"
+  
+  # Base 3:
+
+  yb-tserver-base3-1:
+    image: ${YB_IMAGE}
+    container_name: yb-tserver-base3-1
+    networks:
+      - yb-dbnet
+    volumes:
+      - vol_yb_base3_1:${YB_MOUNT_PREFIX}/tserver:rw
+    command: [ "/docker-entrypoint.sh", "/home/${YB_USER}/bin/yb-tserver",
+      "--fs_data_dirs=${YB_MOUNT_PREFIX}/tserver",
+      "--enable_ysql",
+      "--ysql_enable_auth",
+      "--logtostderr",
+      "--rpc_bind_addresses=yb-tserver-base3-1:9100",
+      "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
+      "--placement_cloud=docker",
+      "--placement_region=base3",
+      "--placement_zone=base3a",
+      "${YB_EXT_FLAGS}"]
+    deploy:
+      resources:
+        limits:
+          cpus: "${YB_RESOURCES_CPU_LIMIT}"
+          memory: "${YB_RESOURCES_MEM_LIMIT}"
+        reservations:
+          cpus: "${YB_RESOURCES_CPU_RESERVATION}"
+          memory: "${YB_RESOURCES_MEM_RESERVATION}"
+
+  yb-tserver-base3-2:
+    image: ${YB_IMAGE}
+    container_name: yb-tserver-base3-2
+    networks:
+      - yb-dbnet
+    volumes:
+      - vol_yb_base3_2:${YB_MOUNT_PREFIX}/tserver:rw
+    command: [ "/docker-entrypoint.sh", "/home/${YB_USER}/bin/yb-tserver",
+      "--fs_data_dirs=${YB_MOUNT_PREFIX}/tserver",
+      "--enable_ysql",
+      "--ysql_enable_auth",
+      "--logtostderr",
+      "--rpc_bind_addresses=yb-tserver-base3-2:9100",
+      "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
+      "--placement_cloud=docker",
+      "--placement_region=base3",
+      "--placement_zone=base3a",
+      "${YB_EXT_FLAGS}"]
+    deploy:
+      resources:
+        limits:
+          cpus: "${YB_RESOURCES_CPU_LIMIT}"
+          memory: "${YB_RESOURCES_MEM_LIMIT}"
+        reservations:
+          cpus: "${YB_RESOURCES_CPU_RESERVATION}"
+          memory: "${YB_RESOURCES_MEM_RESERVATION}"
+
+  yb-tserver-base3-3:
+    image: ${YB_IMAGE}
+    container_name: yb-tserver-base3-3
+    networks:
+      - yb-dbnet
+    volumes:
+      - vol_yb_base3_3:${YB_MOUNT_PREFIX}/tserver:rw
+    command: [ "/docker-entrypoint.sh", "/home/${YB_USER}/bin/yb-tserver",
+      "--fs_data_dirs=${YB_MOUNT_PREFIX}/tserver",
+      "--enable_ysql",
+      "--ysql_enable_auth",
+      "--logtostderr",
+      "--rpc_bind_addresses=yb-tserver-base3-3:9100",
+      "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
+      "--placement_cloud=docker",
+      "--placement_region=base3",
+      "--placement_zone=base3a",
+      "${YB_EXT_FLAGS}"]
+    deploy:
+      resources:
+        limits:
+          cpus: "${YB_RESOURCES_CPU_LIMIT}"
+          memory: "${YB_RESOURCES_MEM_LIMIT}"
+        reservations:
+          cpus: "${YB_RESOURCES_CPU_RESERVATION}"
+          memory: "${YB_RESOURCES_MEM_RESERVATION}"

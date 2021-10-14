@@ -50,10 +50,12 @@ scrape_configs:
       - targets: ['yb-master-n1:9000','yb-master-n2:9000','yb-master-n3:9000']
         labels:
           export_type: "master_export"
-  - job_name: 'yb-tservers-shared'
+  - job_name: 'yb-tservers-base'
     metrics_path: /prometheus-metrics
     static_configs:
-      - targets: ['yb-tserver-shared-1:9000','yb-tserver-shared-2:9000','yb-tserver-shared-3:9000']
+      - targets: ['yb-tserver-base1-1:9000','yb-tserver-base1-2:9000','yb-tserver-base1-3:9000',
+                  'yb-tserver-base2-1:9000','yb-tserver-base2-2:9000','yb-tserver-base2-3:9000',
+                  'yb-tserver-base3-1:9000','yb-tserver-base3-2:9000','yb-tserver-base3-3:9000']
         labels:
           export_type: "tserver_export"
   - job_name: 'yb-tservers-tenant1'
