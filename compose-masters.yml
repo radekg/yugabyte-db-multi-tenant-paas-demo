@@ -30,6 +30,8 @@ services:
       "--logtostderr",
       "--minloglevel=1",
       "--placement_cloud=docker",
+      "--stop_on_parent_termination",
+      "--undefok=stop_on_parent_termination",
       "--replication_factor=3"]
 
   yb-master-2:
@@ -46,6 +48,8 @@ services:
       "--logtostderr",
       "--minloglevel=1",
       "--placement_cloud=docker",
+      "--stop_on_parent_termination",
+      "--undefok=stop_on_parent_termination",
       "--replication_factor=3"]
 
   yb-master-3:
@@ -62,4 +66,6 @@ services:
       "--logtostderr",
       "--minloglevel=1",
       "--placement_cloud=docker",
+      "--stop_on_parent_termination",
+      "--undefok=stop_on_parent_termination",
       "--replication_factor=3"]

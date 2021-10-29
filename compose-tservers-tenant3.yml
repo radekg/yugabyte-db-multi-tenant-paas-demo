@@ -45,6 +45,8 @@ services:
       "--placement_cloud=docker",
       "--placement_region=tenant3",
       "--placement_zone=tenant3a",
+      "--stop_on_parent_termination",
+      "--undefok=stop_on_parent_termination",
       "${YB_EXT_FLAGS}"]
     deploy:
       resources:
@@ -72,6 +74,8 @@ services:
       "--placement_cloud=docker",
       "--placement_region=tenant3",
       "--placement_zone=tenant3a",
+      "--stop_on_parent_termination",
+      "--undefok=stop_on_parent_termination",
       "${YB_EXT_FLAGS}"]
     deploy:
       resources:
@@ -99,6 +103,8 @@ services:
       "--placement_cloud=docker",
       "--placement_region=tenant3",
       "--placement_zone=tenant3a",
+      "--stop_on_parent_termination",
+      "--undefok=stop_on_parent_termination",
       "${YB_EXT_FLAGS}"]
     deploy:
       resources:
