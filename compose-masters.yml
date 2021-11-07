@@ -24,13 +24,18 @@ services:
     volumes:
       - vol_yb_master_1:${YB_MOUNT_PREFIX}/master:rw
     command: [ "/docker-entrypoint.sh", "/home/${YB_USER}/bin/yb-master",
+      "--callhome_enabled=false",
       "--fs_data_dirs=${YB_MOUNT_PREFIX}/master",
       "--master_addresses=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
       "--rpc_bind_addresses=yb-master-n1:7100",
       "--logtostderr",
       "--minloglevel=1",
       "--placement_cloud=docker",
+      "--stop_on_parent_termination",
+      "--undefok=stop_on_parent_termination",
       "--replication_factor=3"]
+    environment:
+      CONTAINER_WITHOUT_DSH: "true"
 
   yb-master-2:
     image: ${YB_IMAGE}
@@ -40,13 +45,18 @@ services:
     volumes:
       - vol_yb_master_2:${YB_MOUNT_PREFIX}/master:rw
     command: [ "/docker-entrypoint.sh", "/home/${YB_USER}/bin/yb-master",
+      "--callhome_enabled=false",
       "--fs_data_dirs=${YB_MOUNT_PREFIX}/master",
       "--master_addresses=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
       "--rpc_bind_addresses=yb-master-n2:7100",
       "--logtostderr",
       "--minloglevel=1",
       "--placement_cloud=docker",
+      "--stop_on_parent_termination",
+      "--undefok=stop_on_parent_termination",
       "--replication_factor=3"]
+    environment:
+      CONTAINER_WITHOUT_DSH: "true"
 
   yb-master-3:
     image: ${YB_IMAGE}
@@ -56,10 +66,15 @@ services:
     volumes:
       - vol_yb_master_3:${YB_MOUNT_PREFIX}/master:rw
     command: [ "/docker-entrypoint.sh", "/home/${YB_USER}/bin/yb-master",
+      "--callhome_enabled=false",
       "--fs_data_dirs=${YB_MOUNT_PREFIX}/master",
       "--master_addresses=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
       "--rpc_bind_addresses=yb-master-n3:7100",
       "--logtostderr",
       "--minloglevel=1",
       "--placement_cloud=docker",
+      "--stop_on_parent_termination",
+      "--undefok=stop_on_parent_termination",
       "--replication_factor=3"]
+    environment:
+      CONTAINER_WITHOUT_DSH: "true"

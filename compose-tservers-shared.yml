@@ -36,6 +36,7 @@ services:
     volumes:
       - vol_yb_shared_1:${YB_MOUNT_PREFIX}/tserver:rw
     command: [ "/docker-entrypoint.sh", "/home/${YB_USER}/bin/yb-tserver",
+      "--callhome_enabled=false",
       "--fs_data_dirs=${YB_MOUNT_PREFIX}/tserver",
       "--enable_ysql",
       "--ysql_enable_auth",
@@ -43,7 +44,13 @@ services:
       "--rpc_bind_addresses=yb-tserver-shared-1:9100",
       "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
       "--placement_cloud=docker",
+      "--placement_region=base1",
+      "--placement_zone=base1a",
+      "--stop_on_parent_termination",
+      "--undefok=stop_on_parent_termination",
       "${YB_EXT_FLAGS}"]
+    environment:
+      CONTAINER_WITHOUT_DSH: "true"
     deploy:
       resources:
         limits:
@@ -61,6 +68,7 @@ services:
     volumes:
       - vol_yb_shared_2:${YB_MOUNT_PREFIX}/tserver:rw
     command: [ "/docker-entrypoint.sh", "/home/${YB_USER}/bin/yb-tserver",
+      "--callhome_enabled=false",
       "--fs_data_dirs=${YB_MOUNT_PREFIX}/tserver",
       "--enable_ysql",
       "--ysql_enable_auth",
@@ -68,7 +76,13 @@ services:
       "--rpc_bind_addresses=yb-tserver-shared-2:9100",
       "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
       "--placement_cloud=docker",
+      "--placement_region=base1",
+      "--placement_zone=base1a",
+      "--stop_on_parent_termination",
+      "--undefok=stop_on_parent_termination",
       "${YB_EXT_FLAGS}"]
+    environment:
+      CONTAINER_WITHOUT_DSH: "true"
     deploy:
       resources:
         limits:
@@ -86,6 +100,7 @@ services:
     volumes:
       - vol_yb_shared_3:${YB_MOUNT_PREFIX}/tserver:rw
     command: [ "/docker-entrypoint.sh", "/home/${YB_USER}/bin/yb-tserver",
+      "--callhome_enabled=false",
       "--fs_data_dirs=${YB_MOUNT_PREFIX}/tserver",
       "--enable_ysql",
       "--ysql_enable_auth",
@@ -93,7 +108,13 @@ services:
       "--rpc_bind_addresses=yb-tserver-shared-3:9100",
       "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
       "--placement_cloud=docker",
+      "--placement_region=base1",
+      "--placement_zone=base1a",
+      "--stop_on_parent_termination",
+      "--undefok=stop_on_parent_termination",
       "${YB_EXT_FLAGS}"]
+    environment:
+      CONTAINER_WITHOUT_DSH: "true"
     deploy:
       resources:
         limits:
