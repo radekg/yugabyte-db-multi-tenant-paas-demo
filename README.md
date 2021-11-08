@@ -4,7 +4,7 @@ The default YugabyteDB Docker image does not handle stop signals. This is fixed 
 
 ```sh
 cd ./.docker/yugabyte-db
-docker build -t local/yugabyte:2.9.0.0-b4 .
+docker build -t local/yugabyte:2.9.1.0-b140 .
 cd -
 ```
 
