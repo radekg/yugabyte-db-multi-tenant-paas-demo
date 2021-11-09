@@ -1,10 +1,28 @@
 ## Build the image
 
-The default YugabyteDB Docker image does not handle stop signals. This is fixed by building custom Docker image used by this configuration:
+You can find a number of Dockerfiles in the `.docker/yugabyte-db` directory:
+
+- `.docker/yugabyte-db/Dockerfile`: builds a local Docker image with better stop signal handling
 
 ```sh
-cd ./.docker/yugabyte-db
+cd ./.docker/yugabyte-db/
 docker build -t local/yugabyte:2.9.1.0-b140 .
+cd -
+```
+
+- `.docker/yugabyte-db/Dockerfile.postgis`: builds a local Docker image with better stop signal handling, support for UID/GID, and PostGIS extension
+
+```sh
+cd ./.docker/yugabyte-db/
+docker build -t local/yugabyte:2.9.1.0-b140 -f Dockerfile.postgis .
+cd -
+```
+
+- `.docker/yugabyte-db/Dockerfile.uid`: builds a local Docker image with better stop signal handling and support for UID/GID
+
+```sh
+cd ./.docker/yugabyte-db/
+docker build -t local/yugabyte:2.9.1.0-b140 -f Dockerfile.uid .
 cd -
 ```
 
