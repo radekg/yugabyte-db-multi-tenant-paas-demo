@@ -26,6 +26,21 @@ docker build -t local/yugabyte:2.9.1.0-b140 -f Dockerfile.uid .
 cd -
 ```
 
+## Build the tools only image
+
+```sh
+cd .docker/yugabyte-tools/
+export DOCKER_IMAGE="yugabytedb/yugabyte"
+export DOCKER_TAG="2.9.1.0-b140"
+docker run --rm \
+    -v $(pwd)/prepare-tools.sh:/tmp/prepare-tools.sh \
+    -v $(pwd)/tools:/tools \
+    --entrypoint /tmp/prepare-tools.sh \
+    -ti ${DOCKER_IMAGE}:${DOCKER_TAG}
+docker build --no-cache -t local/yugabyte-tools:${DOCKER_TAG} .
+cd -
+```
+
 ## YugabyteDB dashboard
 
 YugabyteDB dashboard can be accessed on port `7000`. Usually `http://localhost:7000`.
