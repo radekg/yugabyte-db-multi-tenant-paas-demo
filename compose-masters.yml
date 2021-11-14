@@ -33,9 +33,20 @@ services:
       "--placement_cloud=docker",
       "--stop_on_parent_termination",
       "--undefok=stop_on_parent_termination",
-      "--replication_factor=3"]
+      "--replication_factor=3",
+      "--memory_limit_hard_bytes=${YB_MEMORY_LIMIT_HARD_BYTES_MASTER}",
+      "--default_memory_limit_to_ram_ratio=${YB_MEMORY_DEFAULT_LIMIT_TO_RAM_RATIO_MASTER}",
+      "--memory_limit_soft_percentage=${YB_MEMORY_LIMIT_SOFT_PERCENTAGE_MASTER}",
+      "--memory_limit_warn_threshold_percentage=${YB_MEMORY_LIMIT_WARN_THRESHOLD_PERCENTAGE_MASTER}",
+      "--mem_tracker_logging=${YB_MEM_TRACKER_LOGGING}",
+      "--mem_tracker_log_stack_trace=${YB_MEM_TRACKER_LOG_STACK_TRACE}",
+      "--mem_tracker_update_consumption_interval_us=${YB_MEM_TRACKER_UPDATE_CONSUMPTION_INTERVAL_US}"]
     environment:
       CONTAINER_WITHOUT_DSH: "true"
+    deploy:
+      resources:
+        reservations:
+          memory: "${YB_RESOURCES_MEM_RESERVATION_MASTER}M"
 
   yb-master-2:
     image: ${YB_IMAGE}
@@ -54,9 +65,20 @@ services:
       "--placement_cloud=docker",
       "--stop_on_parent_termination",
       "--undefok=stop_on_parent_termination",
-      "--replication_factor=3"]
+      "--replication_factor=3",
+      "--memory_limit_hard_bytes=${YB_MEMORY_LIMIT_HARD_BYTES_MASTER}",
+      "--default_memory_limit_to_ram_ratio=${YB_MEMORY_DEFAULT_LIMIT_TO_RAM_RATIO_MASTER}",
+      "--memory_limit_soft_percentage=${YB_MEMORY_LIMIT_SOFT_PERCENTAGE_MASTER}",
+      "--memory_limit_warn_threshold_percentage=${YB_MEMORY_LIMIT_WARN_THRESHOLD_PERCENTAGE_MASTER}",
+      "--mem_tracker_logging=${YB_MEM_TRACKER_LOGGING}",
+      "--mem_tracker_log_stack_trace=${YB_MEM_TRACKER_LOG_STACK_TRACE}",
+      "--mem_tracker_update_consumption_interval_us=${YB_MEM_TRACKER_UPDATE_CONSUMPTION_INTERVAL_US}"]
     environment:
       CONTAINER_WITHOUT_DSH: "true"
+    deploy:
+      resources:
+        reservations:
+          memory: "${YB_RESOURCES_MEM_RESERVATION_MASTER}M"
 
   yb-master-3:
     image: ${YB_IMAGE}
@@ -75,6 +97,17 @@ services:
       "--placement_cloud=docker",
       "--stop_on_parent_termination",
       "--undefok=stop_on_parent_termination",
-      "--replication_factor=3"]
+      "--replication_factor=3",
+      "--memory_limit_hard_bytes=${YB_MEMORY_LIMIT_HARD_BYTES_MASTER}",
+      "--default_memory_limit_to_ram_ratio=${YB_MEMORY_DEFAULT_LIMIT_TO_RAM_RATIO_MASTER}",
+      "--memory_limit_soft_percentage=${YB_MEMORY_LIMIT_SOFT_PERCENTAGE_MASTER}",
+      "--memory_limit_warn_threshold_percentage=${YB_MEMORY_LIMIT_WARN_THRESHOLD_PERCENTAGE_MASTER}",
+      "--mem_tracker_logging=${YB_MEM_TRACKER_LOGGING}",
+      "--mem_tracker_log_stack_trace=${YB_MEM_TRACKER_LOG_STACK_TRACE}",
+      "--mem_tracker_update_consumption_interval_us=${YB_MEM_TRACKER_UPDATE_CONSUMPTION_INTERVAL_US}"]
     environment:
       CONTAINER_WITHOUT_DSH: "true"
+    deploy:
+      resources:
+        reservations:
+          memory: "${YB_RESOURCES_MEM_RESERVATION_MASTER}M"

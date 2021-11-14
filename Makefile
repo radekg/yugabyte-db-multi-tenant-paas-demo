@@ -1,0 +1,25 @@
+MEM_TRACKER_MASTER_MEMORY?=512
+MEM_TRACKER_MASTER_RATIO?=0.9
+MEM_TRACKER_TSERVER_MEMORY?=2048
+MEM_TRACKER_TSERVER_RATIO?=0.9
+
+.PHONY: mem-tracker-settings-master
+mem-tracker-settings-master:
+	$(eval $@_BYTES_MEM := $(shell echo - | awk 'BEGIN {printf("%d", $(MEM_TRACKER_MASTER_MEMORY) * 1024 * 1024 * $(MEM_TRACKER_MASTER_RATIO))}'))
+	$(eval $@_SOFT_LIMIT := $(shell echo - | awk 'BEGIN {printf("%d", $(MEM_TRACKER_MASTER_RATIO) * 100)}'))
+	$(eval $@_WARN_LIMIT := $(shell echo - | awk 'BEGIN {printf("%d", $($@_SOFT_LIMIT) * 1.05)}'))
+	@echo YB_RESOURCES_MEM_RESERVATION_MASTER=$(MEM_TRACKER_MASTER_MEMORY)
+	@echo YB_MEMORY_LIMIT_HARD_BYTES_MASTER=$($@_BYTES_MEM)
+	@echo YB_MEMORY_DEFAULT_LIMIT_TO_RAM_RATIO_MASTER=$(MEM_TRACKER_MASTER_RATIO)
+	@echo YB_MEMORY_LIMIT_SOFT_PERCENTAGE_MASTER=$($@_SOFT_LIMIT)
+	@echo YB_MEMORY_LIMIT_WARN_THRESHOLD_PERCENTAGE_MASTER=$($@_WARN_LIMIT)
+
+.PHONY: mem-tracker-settings-tserver
+mem-tracker-settings-tserver:
+	$(eval $@_BYTES_MEM := $(shell echo - | awk 'BEGIN {printf("%d", $(MEM_TRACKER_TSERVER_MEMORY) * 1024 * 1024 * $(MEM_TRACKER_TSERVER_RATIO))}'))
+	$(eval $@_SOFT_LIMIT := $(shell echo - | awk 'BEGIN {printf("%d", $(MEM_TRACKER_TSERVER_RATIO) * 100)}'))
+	$(eval $@_WARN_LIMIT := $(shell echo - | awk 'BEGIN {printf("%d", $($@_SOFT_LIMIT) * 1.05)}'))
+	@echo YB_MEMORY_LIMIT_HARD_BYTES_TSERVER=$($@_BYTES_MEM)
+	@echo YB_MEMORY_DEFAULT_LIMIT_TO_RAM_RATIO_TSERVER=$(MEM_TRACKER_TSERVER_RATIO)
+	@echo YB_MEMORY_LIMIT_SOFT_PERCENTAGE_TSERVER=$($@_SOFT_LIMIT)
+	@echo YB_MEMORY_LIMIT_WARN_THRESHOLD_PERCENTAGE_TSERVER=$($@_WARN_LIMIT)
