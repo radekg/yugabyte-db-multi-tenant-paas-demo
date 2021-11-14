@@ -48,17 +48,21 @@ services:
       "--placement_zone=tenant2a",
       "--stop_on_parent_termination",
       "--undefok=stop_on_parent_termination",
-      "${YB_EXT_FLAGS}"]
+      "${YB_EXT_FLAGS}",
+      "--memory_limit_hard_bytes=${YB_MEMORY_LIMIT_HARD_BYTES_TSERVER}",
+      "--default_memory_limit_to_ram_ratio=${YB_MEMORY_DEFAULT_LIMIT_TO_RAM_RATIO_TSERVER}",
+      "--memory_limit_soft_percentage=${YB_MEMORY_LIMIT_SOFT_PERCENTAGE_TSERVER}",
+      "--memory_limit_warn_threshold_percentage=${YB_MEMORY_LIMIT_WARN_THRESHOLD_PERCENTAGE_TSERVER}",
+      "--mem_tracker_logging=${YB_MEM_TRACKER_LOGGING}",
+      "--mem_tracker_log_stack_trace=${YB_MEM_TRACKER_LOG_STACK_TRACE}",
+      "--mem_tracker_update_consumption_interval_us=${YB_MEM_TRACKER_UPDATE_CONSUMPTION_INTERVAL_US}"]
     environment:
       CONTAINER_WITHOUT_DSH: "true"
     deploy:
       resources:
-        limits:
-          cpus: "${YB_RESOURCES_CPU_LIMIT}"
-          memory: "${YB_RESOURCES_MEM_LIMIT}"
         reservations:
-          cpus: "${YB_RESOURCES_CPU_RESERVATION}"
-          memory: "${YB_RESOURCES_MEM_RESERVATION}"
+          cpus: "${YB_RESOURCES_CPU_RESERVATION_TSERVER}"
+          memory: "${YB_RESOURCES_MEM_RESERVATION_TSERVER}M"
 
   yb-tserver-tenant2-2:
     image: ${YB_IMAGE}
@@ -80,17 +84,21 @@ services:
       "--placement_zone=tenant2a",
       "--stop_on_parent_termination",
       "--undefok=stop_on_parent_termination",
-      "${YB_EXT_FLAGS}"]
+      "${YB_EXT_FLAGS}",
+      "--memory_limit_hard_bytes=${YB_MEMORY_LIMIT_HARD_BYTES_TSERVER}",
+      "--default_memory_limit_to_ram_ratio=${YB_MEMORY_DEFAULT_LIMIT_TO_RAM_RATIO_TSERVER}",
+      "--memory_limit_soft_percentage=${YB_MEMORY_LIMIT_SOFT_PERCENTAGE_TSERVER}",
+      "--memory_limit_warn_threshold_percentage=${YB_MEMORY_LIMIT_WARN_THRESHOLD_PERCENTAGE_TSERVER}",
+      "--mem_tracker_logging=${YB_MEM_TRACKER_LOGGING}",
+      "--mem_tracker_log_stack_trace=${YB_MEM_TRACKER_LOG_STACK_TRACE}",
+      "--mem_tracker_update_consumption_interval_us=${YB_MEM_TRACKER_UPDATE_CONSUMPTION_INTERVAL_US}"]
     environment:
       CONTAINER_WITHOUT_DSH: "true"
     deploy:
       resources:
-        limits:
-          cpus: "${YB_RESOURCES_CPU_LIMIT}"
-          memory: "${YB_RESOURCES_MEM_LIMIT}"
         reservations:
-          cpus: "${YB_RESOURCES_CPU_RESERVATION}"
-          memory: "${YB_RESOURCES_MEM_RESERVATION}"
+          cpus: "${YB_RESOURCES_CPU_RESERVATION_TSERVER}"
+          memory: "${YB_RESOURCES_MEM_RESERVATION_TSERVER}M"
 
   yb-tserver-tenant2-3:
     image: ${YB_IMAGE}
@@ -112,14 +120,18 @@ services:
       "--placement_zone=tenant2a",
       "--stop_on_parent_termination",
       "--undefok=stop_on_parent_termination",
-      "${YB_EXT_FLAGS}"]
+      "${YB_EXT_FLAGS}",
+      "--memory_limit_hard_bytes=${YB_MEMORY_LIMIT_HARD_BYTES_TSERVER}",
+      "--default_memory_limit_to_ram_ratio=${YB_MEMORY_DEFAULT_LIMIT_TO_RAM_RATIO_TSERVER}",
+      "--memory_limit_soft_percentage=${YB_MEMORY_LIMIT_SOFT_PERCENTAGE_TSERVER}",
+      "--memory_limit_warn_threshold_percentage=${YB_MEMORY_LIMIT_WARN_THRESHOLD_PERCENTAGE_TSERVER}",
+      "--mem_tracker_logging=${YB_MEM_TRACKER_LOGGING}",
+      "--mem_tracker_log_stack_trace=${YB_MEM_TRACKER_LOG_STACK_TRACE}",
+      "--mem_tracker_update_consumption_interval_us=${YB_MEM_TRACKER_UPDATE_CONSUMPTION_INTERVAL_US}"]
     environment:
       CONTAINER_WITHOUT_DSH: "true"
     deploy:
       resources:
-        limits:
-          cpus: "${YB_RESOURCES_CPU_LIMIT}"
-          memory: "${YB_RESOURCES_MEM_LIMIT}"
         reservations:
-          cpus: "${YB_RESOURCES_CPU_RESERVATION}"
-          memory: "${YB_RESOURCES_MEM_RESERVATION}"
+          cpus: "${YB_RESOURCES_CPU_RESERVATION_TSERVER}"
+          memory: "${YB_RESOURCES_MEM_RESERVATION_TSERVER}M"

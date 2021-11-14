@@ -53,12 +53,9 @@ services:
       CONTAINER_WITHOUT_DSH: "true"
     deploy:
       resources:
-        limits:
-          cpus: "${YB_RESOURCES_CPU_LIMIT}"
-          memory: "${YB_RESOURCES_MEM_LIMIT}"
         reservations:
-          cpus: "${YB_RESOURCES_CPU_RESERVATION}"
-          memory: "${YB_RESOURCES_MEM_RESERVATION}"
+          cpus: "${YB_RESOURCES_CPU_RESERVATION_TSERVER}"
+          memory: "${YB_RESOURCES_MEM_RESERVATION_TSERVER}"
 
   yb-tserver-tenant3-2:
     image: ${YB_IMAGE}
@@ -85,12 +82,9 @@ services:
       CONTAINER_WITHOUT_DSH: "true"
     deploy:
       resources:
-        limits:
-          cpus: "${YB_RESOURCES_CPU_LIMIT}"
-          memory: "${YB_RESOURCES_MEM_LIMIT}"
         reservations:
-          cpus: "${YB_RESOURCES_CPU_RESERVATION}"
-          memory: "${YB_RESOURCES_MEM_RESERVATION}"
+          cpus: "${YB_RESOURCES_CPU_RESERVATION_TSERVER}"
+          memory: "${YB_RESOURCES_MEM_RESERVATION_TSERVER}"
 
   yb-tserver-tenant3-3:
     image: ${YB_IMAGE}
@@ -117,9 +111,6 @@ services:
       CONTAINER_WITHOUT_DSH: "true"
     deploy:
       resources:
-        limits:
-          cpus: "${YB_RESOURCES_CPU_LIMIT}"
-          memory: "${YB_RESOURCES_MEM_LIMIT}"
         reservations:
-          cpus: "${YB_RESOURCES_CPU_RESERVATION}"
-          memory: "${YB_RESOURCES_MEM_RESERVATION}"
+          cpus: "${YB_RESOURCES_CPU_RESERVATION_TSERVER}"
+          memory: "${YB_RESOURCES_MEM_RESERVATION_TSERVER}"
