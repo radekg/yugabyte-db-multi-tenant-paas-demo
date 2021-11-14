@@ -46,7 +46,6 @@ services:
     deploy:
       resources:
         reservations:
-          cpus: "${YB_RESOURCES_CPU_RESERVATION_MASTER}"
           memory: "${YB_RESOURCES_MEM_RESERVATION_MASTER}M"
 
   yb-master-2:
@@ -79,7 +78,6 @@ services:
     deploy:
       resources:
         reservations:
-          cpus: "${YB_RESOURCES_CPU_RESERVATION_MASTER}"
           memory: "${YB_RESOURCES_MEM_RESERVATION_MASTER}M"
 
   yb-master-3:
@@ -112,5 +110,4 @@ services:
     deploy:
       resources:
         reservations:
-          cpus: "${YB_RESOURCES_CPU_RESERVATION_MASTER}"
           memory: "${YB_RESOURCES_MEM_RESERVATION_MASTER}M"

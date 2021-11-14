@@ -54,7 +54,6 @@ services:
     deploy:
       resources:
         reservations:
-          cpus: "${YB_RESOURCES_CPU_RESERVATION_TSERVER}"
           memory: "${YB_RESOURCES_MEM_RESERVATION_TSERVER}"
 
   yb-tserver-tenant3-2:
@@ -83,7 +82,6 @@ services:
     deploy:
       resources:
         reservations:
-          cpus: "${YB_RESOURCES_CPU_RESERVATION_TSERVER}"
           memory: "${YB_RESOURCES_MEM_RESERVATION_TSERVER}"
 
   yb-tserver-tenant3-3:
@@ -112,5 +110,4 @@ services:
     deploy:
       resources:
         reservations:
-          cpus: "${YB_RESOURCES_CPU_RESERVATION_TSERVER}"
           memory: "${YB_RESOURCES_MEM_RESERVATION_TSERVER}"
