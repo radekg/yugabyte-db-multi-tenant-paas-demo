@@ -1,44 +1,13 @@
 ## Build the image
 
-You can find a number of Dockerfiles in the `.docker/yugabyte-db` directory:
+- `make docker-image-uid`: builds a Docker image using a downloaded YugabyteDB distribution; this Docker image supports configurable uid/gid
+- `make docker-image-postgis`: builds a Docker image using a downloaded YugabyteDB distribution and configures PostGIS; this Docker image supports configurable uid/gid
+- `make docker-image-upstream`: builds a Docker image using an upstream image; this Docker image does not support configurable uid/gid
 
-- `.docker/yugabyte-db/Dockerfile`: builds a local Docker image with better stop signal handling
-
-```sh
-cd .docker/yugabyte-db/
-docker build -t local/yugabyte:2.9.1.0-b140 .
-cd -
-```
-
-- `.docker/yugabyte-db/Dockerfile.postgis`: builds a local Docker image with better stop signal handling, support for UID/GID, and PostGIS extension
+### Build the tools only image
 
 ```sh
-cd .docker/yugabyte-db/
-docker build -t local/yugabyte:2.9.1.0-b140-postgis -f Dockerfile.postgis .
-cd -
-```
-
-- `.docker/yugabyte-db/Dockerfile.uid`: builds a local Docker image with better stop signal handling and support for UID/GID
-
-```sh
-cd .docker/yugabyte-db/
-docker build -t local/yugabyte:2.9.1.0-b140 -f Dockerfile.uid .
-cd -
-```
-
-## Build the tools only image
-
-```sh
-cd .docker/yugabyte-tools/
-export DOCKER_IMAGE="yugabytedb/yugabyte"
-export DOCKER_TAG="2.9.1.0-b140"
-docker run --rm \
-    -v $(pwd)/prepare-tools.sh:/tmp/prepare-tools.sh \
-    -v $(pwd)/tools:/tools \
-    --entrypoint /tmp/prepare-tools.sh \
-    -ti ${DOCKER_IMAGE}:${DOCKER_TAG}
-docker build --no-cache -t local/yugabyte-tools:${DOCKER_TAG} .
-cd -
+make docker-image-tools
 ```
 
 ## YugabyteDB dashboard

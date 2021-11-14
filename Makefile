@@ -1,7 +1,37 @@
+DOCKER_IMAGE_NAME?=local/yugabyte
+TOOLS_DOCKER_IMAGE_NAME?=local/yugabyte-tools
+DOCKER_IMAGE_TAG?=2.9.1.0-b140
+
+TOOLS_BASE_DOCKER_IMAGE_NAME?=yugabytedb/yugabyte
+TOOLS_BASE_DOCKER_IMAGE_TAG?=$(DOCKER_IMAGE_TAG)
+
+CURRENT_DIR=$(dir $(realpath $(firstword $(MAKEFILE_LIST))))
+
 MEM_TRACKER_MASTER_MEMORY?=512
 MEM_TRACKER_MASTER_RATIO?=0.9
 MEM_TRACKER_TSERVER_MEMORY?=2048
 MEM_TRACKER_TSERVER_RATIO?=0.9
+
+.PHONY: docker-image-postgis
+docker-image-postgis:
+	docker build -t $(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG)-postgis -f Dockerfile.postgis $(CURRENT_DIR)/.docker/yugabyte-db/
+
+.PHONY: docker-image-uid
+docker-image-uid:
+	docker build -t $(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG) -f Dockerfile.uid $(CURRENT_DIR)/.docker/yugabyte-db/
+
+.PHONY: docker-image-upstream
+docker-image-upstream:
+	docker build -t $(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG) -f Dockerfile.upstream $(CURRENT_DIR)/.docker/yugabyte-db/
+
+.PHONY: docker-image-tools
+docker-image-tools:
+	docker run --rm \
+    	-v $(CURRENT_DIR)/.docker/yugabyte-tools/prepare-tools.sh:/tmp/prepare-tools.sh \
+    	-v $(CURRENT_DIR)/.docker/yugabyte-tools/tools:/tools \
+    	--entrypoint /tmp/prepare-tools.sh \
+    	-ti ${TOOLS_BASE_DOCKER_IMAGE_NAME}:${TOOLS_BASE_DOCKER_IMAGE_TAG} \
+	&& docker build --no-cache -t $(TOOLS_DOCKER_IMAGE_NAME):${DOCKER_IMAGE_TAG} $(CURRENT_DIR)/.docker/yugabyte-tools/
 
 .PHONY: mem-tracker-settings-master
 mem-tracker-settings-master:
