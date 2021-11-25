@@ -25,7 +25,9 @@ COPY --from=builder --chown=${USERNAME}:${GROUPNAME} /home/${USERNAME} /home/${U
 
 SHELL ["/bin/bash", "-c"]
 
-RUN chmod +x /docker-entrypoint.sh \
+RUN echo "export PS1='[\u@\h \W]\$'" >> /home/${USERNAME}/.bashrc \
+    && chown ${USERNAME}:${GROUPNAME} /home/${USERNAME}/.bashrc \
+    && chmod +x /docker-entrypoint.sh \
     && mkdir -p /mnt/{master,tserver} \
     && chown -R ${USERNAME}:${GROUPNAME} /mnt \
     && ln -s /home/${USERNAME}/bin/yb-admin /usr/local/bin/yb-admin \
