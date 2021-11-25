@@ -1,6 +1,6 @@
 DOCKER_IMAGE_NAME?=local/yugabyte
 TOOLS_DOCKER_IMAGE_NAME?=local/yugabyte-tools
-DOCKER_IMAGE_TAG?=2.9.1.0-b140
+DOCKER_IMAGE_TAG?=2.11.0.0-b7
 
 TOOLS_BASE_DOCKER_IMAGE_NAME?=yugabytedb/yugabyte
 TOOLS_BASE_DOCKER_IMAGE_TAG?=$(DOCKER_IMAGE_TAG)
@@ -14,15 +14,15 @@ MEM_TRACKER_TSERVER_RATIO?=0.9
 
 .PHONY: docker-image-postgis
 docker-image-postgis:
-	docker build -t $(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG)-postgis -f Dockerfile.postgis $(CURRENT_DIR)/.docker/yugabyte-db/
+	docker build -t $(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG)-postgis -f $(CURRENT_DIR)/.docker/yugabyte-db/Dockerfile.postgis $(CURRENT_DIR)/.docker/yugabyte-db/
 
 .PHONY: docker-image-uid
 docker-image-uid:
-	docker build -t $(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG) -f Dockerfile.uid $(CURRENT_DIR)/.docker/yugabyte-db/
+	docker build -t $(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG) -f $(CURRENT_DIR)/.docker/yugabyte-db/Dockerfile.uid $(CURRENT_DIR)/.docker/yugabyte-db/
 
 .PHONY: docker-image-upstream
 docker-image-upstream:
-	docker build -t $(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG) -f Dockerfile.upstream $(CURRENT_DIR)/.docker/yugabyte-db/
+	docker build -t $(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG) -f $(CURRENT_DIR)/.docker/yugabyte-db/Dockerfile.upstream $(CURRENT_DIR)/.docker/yugabyte-db/
 
 .PHONY: docker-image-tools
 docker-image-tools:

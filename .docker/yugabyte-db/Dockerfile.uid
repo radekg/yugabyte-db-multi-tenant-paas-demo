@@ -1,30 +1,31 @@
 FROM centos:7.9.2009 as builder
-ARG YB_VERSION=2.9.1.0
+ARG YB_VERSION=2.11.0.0-b7
 ARG USERNAME=yugabyte
 
-RUN yum update -y \
+RUN YB_VERSION_ONLY=$(echo ${YB_VERSION} | awk -F- '{print $1}') \
+    && yum update -y \
     && yum install -y curl wget \
-    && wget https://downloads.yugabyte.com/yugabyte-${YB_VERSION}-linux.tar.gz -O /yugabyte-${YB_VERSION}-linux.tar.gz \
+    && wget https://downloads.yugabyte.com/releases/${YB_VERSION_ONLY}/yugabyte-${YB_VERSION}-linux-x86_64.tar.gz -O /yugabyte-${YB_VERSION_ONLY}-linux.tar.gz \
     && mkdir -p /home/${USERNAME} \
-    && tar xvfz /yugabyte-${YB_VERSION}-linux.tar.gz -C /home/${USERNAME} --strip 1 \
+    && tar xvfz /yugabyte-${YB_VERSION_ONLY}-linux.tar.gz -C /home/${USERNAME} --strip 1 \
     && /home/${USERNAME}/bin/post_install.sh
 
-FROM centos:7.9.2009
+FROM alpine:3.15
 ARG GID=1060
 ARG GROUPNAME=yugabyte
 ARG UID=1060
 ARG USERNAME=yugabyte
-ARG YB_VERSION=2.9.1.0
 
-RUN groupadd -g ${GID} ${GROUPNAME} \
-    && useradd -m -d /home/${USERNAME} -g ${GID} -u ${UID} -s /bin/bash ${USERNAME}
+RUN apk add --no-cache bash gawk sed grep bc coreutils openssl ca-certificates \
+    && addgroup -g ${GID} ${GROUPNAME} \
+    && adduser -u ${UID} -G ${GROUPNAME} -D -s /bin/bash ${USERNAME}
 
 COPY --chown=${USERNAME}:${GROUPNAME} docker-entrypoint.sh /docker-entrypoint.sh
 COPY --from=builder --chown=${USERNAME}:${GROUPNAME} /home/${USERNAME} /home/${USERNAME}
 
-RUN yum update -y \
-    && yum install -y openssl ca-certificates \
-    && chmod +x /docker-entrypoint.sh \
+SHELL ["/bin/bash", "-c"]
+
+RUN chmod +x /docker-entrypoint.sh \
     && mkdir -p /mnt/{master,tserver} \
     && chown -R ${USERNAME}:${GROUPNAME} /mnt \
     && ln -s /home/${USERNAME}/bin/yb-admin /usr/local/bin/yb-admin \
