@@ -1,6 +1,6 @@
 FROM centos:7.9.2009 as builder
 ARG USERNAME=yugabyte
-ARG YB_VERSION=2.9.1.0
+ARG YB_VERSION=2.11.0.0
 
 # Notes on this stage:
 #  - install which because post_install -e requires it to locate ldd
@@ -18,23 +18,23 @@ RUN yum install https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_
     && cp -v "$(/usr/pgsql-11/bin/pg_config --sharedir)"/extension/*postgis*.control "$(/home/${USERNAME}/postgres/bin/pg_config --sharedir)"/extension \
     && /home/${USERNAME}/bin/post_install.sh -e
 
-FROM centos:7.9.2009
+FROM alpine:3.15
 ARG GID=1060
 ARG GROUPNAME=yugabyte
 ARG UID=1060
 ARG USERNAME=yugabyte
-ARG YB_VERSION=2.9.1.0
+ARG YB_VERSION=2.11.0.0
 
-RUN groupadd -g ${GID} ${GROUPNAME} \
-    && useradd -m -d /home/${USERNAME} -g ${GID} -u ${UID} -s /bin/bash ${USERNAME}
+RUN apk add --no-cache bash gawk sed grep bc coreutils openssl ca-certificates \
+    && addgroup -g ${GID} ${GROUPNAME} \
+    && adduser -u ${UID} -G ${GROUPNAME} -D -s /bin/bash ${USERNAME}
 
 COPY --chown=${USERNAME}:${GROUPNAME} docker-entrypoint.sh /docker-entrypoint.sh
 COPY --from=builder --chown=${USERNAME}:${GROUPNAME} /home/${USERNAME} /home/${USERNAME}
 
-RUN yum update -y \
-    && yum install -y openssl ca-certificates \
-    && chmod +x /docker-entrypoint.sh \
-    && mkdir -p /mnt/{master,tserver} \
+RUN chmod +x /docker-entrypoint.sh \
+    && mkdir -p /mnt/master \
+    && mkdir -p /mnt/tserver \
     && chown -R ${USERNAME}:${GROUPNAME} /mnt \
     && ln -s /home/${USERNAME}/bin/yb-admin /usr/local/bin/yb-admin \
     && ln -s /home/${USERNAME}/bin/yb-ts-cli /usr/local/bin/yb-ts-cli \
