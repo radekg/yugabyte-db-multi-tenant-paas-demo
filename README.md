@@ -217,3 +217,10 @@ docker exec -ti yb-master-n1 /bin/bash -c \
 docker exec -ti yb-master-n1 /bin/bash -c \
     'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 modify_placement_info docker.base1.base1a 3'
 ```
+
+```sh
+docker exec -ti yb-master-n1 /bin/bash -c \
+    'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 change_master_config REMOVE_SERVER yb-master-n3 7100'
+docker exec -ti yb-master-n1 /bin/bash -c \
+    'yb-admin -master_addresses yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100 change_master_config ADD_SERVER yb-master-n3 7100'
+```
