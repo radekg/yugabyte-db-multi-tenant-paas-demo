@@ -16,6 +16,10 @@ MEM_TRACKER_TSERVER_RATIO?=0.9
 docker-image-postgis:
 	docker build -t $(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG)-postgis -f $(CURRENT_DIR)/.docker/yugabyte-db/Dockerfile.postgis $(CURRENT_DIR)/.docker/yugabyte-db/
 
+.PHONY: docker-image-postgis32
+docker-image-postgis32:
+	docker build -t $(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG)-postgis32 -f $(CURRENT_DIR)/.docker/yugabyte-db/Dockerfile.postgis32 $(CURRENT_DIR)/.docker/yugabyte-db/
+
 .PHONY: docker-image-uid
 docker-image-uid:
 	docker build -t $(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG) -f $(CURRENT_DIR)/.docker/yugabyte-db/Dockerfile.uid $(CURRENT_DIR)/.docker/yugabyte-db/

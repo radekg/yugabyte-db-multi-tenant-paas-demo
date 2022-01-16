@@ -2,6 +2,7 @@
 
 - `make docker-image-uid`: builds a Docker image using a downloaded YugabyteDB distribution; this Docker image supports configurable uid/gid
 - `make docker-image-postgis`: builds a Docker image using a downloaded YugabyteDB distribution and configures PostGIS; this Docker image supports configurable uid/gid
+- `make docker-image-postgis32`: builds an alternative Docker image using a downloaded YugabyteDB distribution and PostGIS 3.2; this Docker image supports configurable uid/gid
 - `make docker-image-upstream`: builds a Docker image using an upstream image; this Docker image does not support configurable uid/gid
 
 ### Build the tools only image

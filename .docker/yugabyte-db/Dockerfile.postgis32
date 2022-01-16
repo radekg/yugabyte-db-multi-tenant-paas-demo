@@ -1,0 +1,49 @@
+# Use the Debian based image because Alipne uses musl
+# and ldd isn't supported to the extent required by post_install.sh -e.
+FROM postgis/postgis:11-3.2 as builder
+ARG YB_VERSION=2.11.0.0-b7
+ARG USERNAME=yugabyte
+
+# we need sed because the default BusyBox version does not contain all options needed in post_install.sh:
+RUN YB_VERSION_ONLY=$(echo ${YB_VERSION} | awk -F- '{print $1}') \
+    && apt-get update \
+    && apt-get install -y curl wget \
+    && wget https://downloads.yugabyte.com/releases/${YB_VERSION_ONLY}/yugabyte-${YB_VERSION}-linux-x86_64.tar.gz -O /yugabyte-${YB_VERSION_ONLY}-linux.tar.gz \
+    && mkdir -p /home/${USERNAME} \
+    && tar xvfz /yugabyte-${YB_VERSION_ONLY}-linux.tar.gz -C /home/${USERNAME} --strip 1 \
+    && /home/${USERNAME}/bin/post_install.sh \
+    && cp -v "$(/usr/bin/pg_config --pkglibdir)"/*postgis*.so "$(/home/${USERNAME}/postgres/bin/pg_config --pkglibdir)" \
+    && cp -v "$(/usr/bin/pg_config --sharedir)"/extension/*postgis*.sql "$(/home/${USERNAME}/postgres/bin/pg_config --sharedir)"/extension \
+    && cp -v "$(/usr/bin/pg_config --sharedir)"/extension/*postgis*.control "$(/home/${USERNAME}/postgres/bin/pg_config --sharedir)"/extension \
+    && /home/${USERNAME}/bin/post_install.sh -e
+
+FROM alpine:3.15
+ARG GID=1060
+ARG GROUPNAME=yugabyte
+ARG UID=1060
+ARG USERNAME=yugabyte
+ARG YB_VERSION=2.11.0.0
+
+RUN apk add --no-cache bash gawk sed grep bc coreutils openssl ca-certificates \
+    && addgroup -g ${GID} ${GROUPNAME} \
+    && adduser -u ${UID} -G ${GROUPNAME} -D -s /bin/bash ${USERNAME}
+
+COPY --chown=${USERNAME}:${GROUPNAME} docker-entrypoint.sh /docker-entrypoint.sh
+COPY --from=builder --chown=${USERNAME}:${GROUPNAME} /home/${USERNAME} /home/${USERNAME}
+
+SHELL ["/bin/bash", "-c"]
+
+RUN echo "export PS1='[\u@\h \W]\$ '" >> /home/${USERNAME}/.bashrc \
+    && chown ${USERNAME}:${GROUPNAME} /home/${USERNAME}/.bashrc \
+    && chmod +x /docker-entrypoint.sh \
+    && mkdir -p /mnt/{master,tserver} \
+    && chown -R ${USERNAME}:${GROUPNAME} /mnt \
+    && ln -s /home/${USERNAME}/bin/yb-admin /usr/local/bin/yb-admin \
+    && ln -s /home/${USERNAME}/bin/yb-ts-cli /usr/local/bin/yb-ts-cli \
+    && ln -s /home/${USERNAME}/bin/ycqlsh /usr/local/bin/ycqlsh \
+    && ln -s /home/${USERNAME}/bin/ysqlsh /usr/local/bin/ysqlsh \
+    && ln -s /home/${USERNAME}/bin/yugabyted /usr/local/bin/yugabyted
+
+USER ${USERNAME}
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
