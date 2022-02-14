@@ -1,5 +1,5 @@
 FROM centos:7.9.2009 as builder
-ARG YB_VERSION=2.11.0.0-b7
+ARG YB_VERSION=2.11.1.0-b305
 ARG USERNAME=yugabyte
 
 RUN YB_VERSION_ONLY=$(echo ${YB_VERSION} | awk -F- '{print $1}') \
