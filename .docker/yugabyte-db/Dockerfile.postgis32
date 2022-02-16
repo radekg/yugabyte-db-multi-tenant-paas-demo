@@ -1,7 +1,7 @@
 # Use the Debian based image because Alipne uses musl
 # and ldd isn't supported to the extent required by post_install.sh -e.
 FROM postgis/postgis:11-3.2 as builder
-ARG YB_VERSION=2.11.1.0-b305
+ARG YB_VERSION=2.11.2.0-b89
 ARG USERNAME=yugabyte
 
 # we need sed because the default BusyBox version does not contain all options needed in post_install.sh:
@@ -22,7 +22,7 @@ ARG GID=1060
 ARG GROUPNAME=yugabyte
 ARG UID=1060
 ARG USERNAME=yugabyte
-ARG YB_VERSION=2.11.1.0
+ARG YB_VERSION=2.11.2.0
 
 RUN apk add --no-cache bash gawk sed grep bc coreutils openssl ca-certificates \
     && addgroup -g ${GID} ${GROUPNAME} \
