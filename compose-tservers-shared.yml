@@ -33,6 +33,8 @@ services:
     container_name: yb-tserver-shared-1
     networks:
       - yb-dbnet
+    ports:
+      - 9100:9100
     volumes:
       - vol_yb_shared_1:${YB_MOUNT_PREFIX}/tserver:rw
     command: [ "/docker-entrypoint.sh", "/home/${YB_USER}/bin/yb-tserver",
@@ -42,6 +44,7 @@ services:
       "--ysql_enable_auth",
       "--logtostderr",
       "--rpc_bind_addresses=yb-tserver-shared-1:9100",
+      "--server_broadcast_addresses=yb-tserver-shared-1:9100,127.0.0.1:9100", # 127.0.0.1 address used for connecting from the host
       "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
       "--placement_cloud=docker",
       "--placement_region=base1",
@@ -68,6 +71,8 @@ services:
     container_name: yb-tserver-shared-2
     networks:
       - yb-dbnet
+    ports:
+      - 9101:9100
     volumes:
       - vol_yb_shared_2:${YB_MOUNT_PREFIX}/tserver:rw
     command: [ "/docker-entrypoint.sh", "/home/${YB_USER}/bin/yb-tserver",
@@ -77,6 +82,7 @@ services:
       "--ysql_enable_auth",
       "--logtostderr",
       "--rpc_bind_addresses=yb-tserver-shared-2:9100",
+      "--server_broadcast_addresses=yb-tserver-shared-2:9100,127.0.0.1:9101", # 127.0.0.1 address used for connecting from the host
       "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
       "--placement_cloud=docker",
       "--placement_region=base1",
@@ -103,6 +109,8 @@ services:
     container_name: yb-tserver-shared-3
     networks:
       - yb-dbnet
+    ports:
+      - 9102:9100
     volumes:
       - vol_yb_shared_3:${YB_MOUNT_PREFIX}/tserver:rw
     command: [ "/docker-entrypoint.sh", "/home/${YB_USER}/bin/yb-tserver",
@@ -112,6 +120,7 @@ services:
       "--ysql_enable_auth",
       "--logtostderr",
       "--rpc_bind_addresses=yb-tserver-shared-3:9100",
+      "--server_broadcast_addresses=yb-tserver-shared-3:9100,127.0.0.1:9102", # 127.0.0.1 address used for connecting from the host
       "--tserver_master_addrs=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
       "--placement_cloud=docker",
       "--placement_region=base1",

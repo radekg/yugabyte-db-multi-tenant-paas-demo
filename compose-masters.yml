@@ -21,13 +21,14 @@ services:
       - yb-dbnet
     ports:
       - 7000:7000
+      - 7100:7100
     volumes:
       - vol_yb_master_1:${YB_MOUNT_PREFIX}/master:rw
     command: [ "/docker-entrypoint.sh", "/home/${YB_USER}/bin/yb-master",
       "--callhome_enabled=false",
       "--fs_data_dirs=${YB_MOUNT_PREFIX}/master",
       "--master_addresses=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
-      "--rpc_bind_addresses=yb-master-n1:7100",
+      "--rpc_bind_addresses=0.0.0.0:7100",
       "--logtostderr",
       "--minloglevel=1",
       "--placement_cloud=docker",
@@ -53,13 +54,15 @@ services:
     container_name: yb-master-n2
     networks:
       - yb-dbnet
+    ports:
+      - 7101:7100
     volumes:
       - vol_yb_master_2:${YB_MOUNT_PREFIX}/master:rw
     command: [ "/docker-entrypoint.sh", "/home/${YB_USER}/bin/yb-master",
       "--callhome_enabled=false",
       "--fs_data_dirs=${YB_MOUNT_PREFIX}/master",
       "--master_addresses=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
-      "--rpc_bind_addresses=yb-master-n2:7100",
+      "--rpc_bind_addresses=0.0.0.0:7100",
       "--logtostderr",
       "--minloglevel=1",
       "--placement_cloud=docker",
@@ -85,13 +88,15 @@ services:
     container_name: yb-master-n3
     networks:
       - yb-dbnet
+    ports:
+      - 7102:7100
     volumes:
       - vol_yb_master_3:${YB_MOUNT_PREFIX}/master:rw
     command: [ "/docker-entrypoint.sh", "/home/${YB_USER}/bin/yb-master",
       "--callhome_enabled=false",
       "--fs_data_dirs=${YB_MOUNT_PREFIX}/master",
       "--master_addresses=yb-master-n1:7100,yb-master-n2:7100,yb-master-n3:7100",
-      "--rpc_bind_addresses=yb-master-n3:7100",
+      "--rpc_bind_addresses=0.0.0.0:7100",
       "--logtostderr",
       "--minloglevel=1",
       "--placement_cloud=docker",
