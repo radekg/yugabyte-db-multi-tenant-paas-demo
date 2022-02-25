@@ -1,6 +1,8 @@
 DOCKER_IMAGE_NAME?=local/yugabyte
+ENVOY_DOCKER_IMAGE_NAME?=local/envoy-thin
 TOOLS_DOCKER_IMAGE_NAME?=local/yugabyte-tools
 DOCKER_IMAGE_TAG?=2.11.2.0-b89
+ENVOY_DOCKER_IMAGE_TAG?=v1.21.1
 
 TOOLS_BASE_DOCKER_IMAGE_NAME?=yugabytedb/yugabyte
 TOOLS_BASE_DOCKER_IMAGE_TAG?=$(DOCKER_IMAGE_TAG)
@@ -11,6 +13,10 @@ MEM_TRACKER_MASTER_MEMORY?=512
 MEM_TRACKER_MASTER_RATIO?=0.9
 MEM_TRACKER_TSERVER_MEMORY?=2048
 MEM_TRACKER_TSERVER_RATIO?=0.9
+
+.PHONY: docker-envoy-image
+docker-envoy-image:
+	docker build -t $(ENVOY_DOCKER_IMAGE_NAME):$(ENVOY_DOCKER_IMAGE_TAG) -f $(CURRENT_DIR)/.docker/envoy/Dockerfile $(CURRENT_DIR)/.docker/envoy/
 
 .PHONY: docker-image-postgis
 docker-image-postgis:

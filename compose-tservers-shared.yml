@@ -15,10 +15,10 @@ volumes:
 services:
 
   envoy-yb-shared:
-    image: envoyproxy/envoy:v1.19.1
+    image: ${ENVOY_IMAGE}
     restart: unless-stopped
     container_name: envoy-yb-shared
-    command: /usr/local/bin/envoy -c /etc/envoy/envoy-yb-shared.yaml #-l debug
+    command: ["/usr/local/bin/envoy", "-c", "/etc/envoy/envoy-yb-shared.yaml"] #-l debug
     ports:
       - 35432:35432
     volumes:

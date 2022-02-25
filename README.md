@@ -1,3 +1,21 @@
+## Envoy Docker image
+
+I'm using a very lightweight, Alpine Linux based Docker image in this configuration because the official Envoy Alpine Docker image does not exist anymore. The default Envoy release uses a Ubuntu 18.04 LTS base and that's a little bit heavy.
+
+To build the Envoy Docker image:
+
+```sh
+make docker-envoy-image
+```
+
+The result is a docker image called `local/envoy-thin:<version>`, where the `version` is defined in the Dockerfile and the Makefile because the `COPY --from` Dockerfile directive does not allow `--from` to be defined by a build argument.
+
+Envoy version is defined in three places:
+
+- `.docker/envoy/Dockerfile`
+- `Makefile`
+- `.env*` files
+
 ## Build the image
 
 - `make docker-image-uid`: builds a Docker image using a downloaded YugabyteDB distribution; this Docker image supports configurable uid/gid

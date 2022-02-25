@@ -15,7 +15,7 @@ volumes:
 services:
 
   envoy-yb-tenant1:
-    image: envoyproxy/envoy:v1.19.1
+    image: ${ENVOY_IMAGE}
     restart: unless-stopped
     container_name: envoy-yb-tenant1
     command: /usr/local/bin/envoy -c /etc/envoy/envoy-yb-tenant1.yaml #-l debug
