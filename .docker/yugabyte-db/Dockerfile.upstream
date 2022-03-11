@@ -1,4 +1,4 @@
-FROM yugabytedb/yugabyte:2.11.2.0-b89
+FROM yugabytedb/yugabyte:2.13.0.0-b42
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
