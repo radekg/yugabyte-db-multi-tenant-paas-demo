@@ -1,5 +1,5 @@
 FROM centos:7.9.2009 as builder
-ARG YB_VERSION=2.13.0.0-b42
+ARG YB_VERSION=2.13.0.1-b2
 ARG USERNAME=yugabyte
 
 RUN YB_VERSION_ONLY=$(echo ${YB_VERSION} | awk -F- '{print $1}') \
@@ -28,7 +28,7 @@ ARG GID=1060
 ARG GROUPNAME=yugabyte
 ARG UID=1060
 ARG USERNAME=yugabyte
-ARG YB_VERSION=2.13.0.0
+ARG YB_VERSION=2.13.0.1
 
 RUN apk add --no-cache bash gawk sed grep bc coreutils openssl ca-certificates \
     && addgroup -g ${GID} ${GROUPNAME} \
